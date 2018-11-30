@@ -1,0 +1,183 @@
+@clearlist 'mobsound'
+@createlist 'mobsound'
+@clearlist 'scan'
+@createlist 'scan'
+@clearlist 'attack'
+@createlist 'attack'
+@clearlist 'track'
+@createlist 'track'
+//****************************
+//********* SETUP ************
+pushlist 'track' 'no' //yes to train skills
+pushlist 'mobsound' 'yes' // yes for mob sound, no for no sound.
+pushlist 'attack' 'yes' // yes to attack, no for no attack
+pushlist 'scan' 'yes' // yes scan horizons, no dont
+//****************************
+//****************************
+if not timerexists 'Sound Timer'
+  createtimer 'Sound Timer'
+  settimer 'Sound Timer' 10000
+endif
+if not timerexists 'SkillTimer'
+  createtimer 'SkillTimer'
+  settimer 'SkillTimer' 10500
+endif
+if not timerexists 'Bandage Timer'
+  createtimer 'Bandage Timer'
+  settimer 'Bandage Timer' 10250
+endif
+// Check the bandage timer to see if enough time has elapsed
+if timer 'Bandage Timer' < 10250
+  // Small delay to slow down the loop. 100 milliseconds means we will not miss
+  // a bandage.
+  pause 100
+  // We need to wait for our current bandage to finish so start the while
+  // loop from the beginning
+  continue
+endif
+// If we are poisoned or don't have full health
+if poisoned 'self' or hits < 80
+  // Enough time has elapsed lets apply a bandage.
+  bandageself
+  // Reset the timer.
+  settimer 'Bandage Timer' 0
+endif
+if not @listexists 'xaxis'
+  @createlist 'xaxis'
+  @pushlist 'xaxis' 3
+  @pushlist 'xaxis' -3
+endif
+if not @listexists 'yaxis'
+  @createlist 'yaxis'
+  @pushlist 'yaxis' 3
+  @pushlist 'yaxis' -3
+endif
+if not listexists 'fish'
+  createlist 'fish'
+  @pushlist 'fish' '0x9ce'
+  @pushlist 'fish'' 0x9cf'
+  @pushlist 'fish' '0x9cc'
+  @pushlist 'fish' '0x9cd'
+endif
+if dead
+  stop
+endif
+if not @findobject 'bow'
+  promptalias 'bow'
+endif
+if not @findobject 'pole'
+  if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
+    setalias 'pole' 'found'
+    pause 600
+  else
+    msg 'No Poles'
+    playsound 'error.wav'
+    pause 10000
+  endif
+endif
+for 0 to 'xaxis'
+  for 0 to 'yaxis'
+    while not @injournal 'biting' 'system'
+      if @inlist 'track' 'Yes' or @inlist 'track' 'yes'
+        if timer 'SkillTimer' > 10500
+          useskill tracking
+          waitforgump 0xb16e7d71 2000
+          replygump 0xb16e7d71 4
+          pause 800
+          settimer 'SkillTimer' 0
+        endif
+      endif
+      if @inlist 'scan' 'Yes' or @inlist 'scan' 'yes'
+        msg 'scan the horizons'
+      endif
+      if not @findobject 'lefthand'
+        equipitem 'bow' 2
+      endif
+      if not @findobject 'pole'
+        if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
+          setalias 'pole' 'found'
+          pause 600
+        else
+          msg 'No Poles'
+          playsound 'error.wav'
+          pause 10000
+        endif
+      endif
+      @canceltarget
+      @useobject 'pole'
+      waitfortarget 2000
+      targettileoffset! 'xaxis[]' 'yaxis[]' 0
+      pause 500
+      if not @injournal 'biting' 'system'
+        pause 7750
+      endif
+      if @injournal 'pull a bottle' 'system'
+        clearjournal
+        headmsg 'GOT ONE'
+        playsound 'cheer.wav'
+      endif
+      if @injournal 'mess' 'system'
+        clearjournal
+        @usetype! 0xdd6
+        pause 1000
+        @usetype! 0xdd6
+        pause 1000
+      endif
+      if @injournal 'closer' 'system'
+        clearjournal
+        resync
+      endif
+      //fishing cleanup
+      if weight >= maxweight
+        for 0 to 'fish'
+          while @findtype fish[] 'any' 'backpack'
+            usetype! 0xf52
+            waitfortarget 1000
+            target! 'found'
+            pause 600
+          endwhile
+        endfor
+        // adds to fishsteak pile on floor
+        if @findtype 0x97a 'any' 'ground' 'any' 2
+          movetype 0x97a 'backpack' 'found'
+          pause 600
+        else
+          //starts fishsteak pile on floor if doesnt exist
+          movetypeoffset 0x97a 'backpack'  'ground'
+          pause 600
+        endif
+      endif
+      //end fishing cleanup
+      //if not @findobject 'lefthand'
+      //equipitem 'bow' 2
+      //endif
+      //attack sea serp
+      getenemy 'murderer' 'enemy' 'criminal' 'gray' 'closest'
+      while @inrange 'enemy' 10
+        if @inlist 'attack' 'Yes' or @inlist 'attack' 'yes'
+          attack! 'enemy'
+        endif
+        if @inlist 'mobsound' 'Yes' or @inlist 'mobsound' 'yes'
+          if timer 'Sound Timer' > 10000
+            playsound 'bell.wav'
+            settimer 'Sound Timer' 0
+          endif
+        endif
+        while diffhits > 30 and not dead
+          autotargetself
+          bigheal
+          pause 1500
+        endwhile
+        if not @findobject 'lefthand'
+          equipitem 'bow' 2
+        endif
+        pause 800
+      endwhile
+    endwhile
+    clearjournal
+  endfor
+  clearjournal
+endfor
+msg 'forward'
+pause 4000
+msg 'stop'
