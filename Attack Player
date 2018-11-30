@@ -1,0 +1,5 @@
+getenemy 'enemy' 'gray' 'innocent' 'criminal' 'murderer' 'humanoid' 'closest'
+//If it's the case that our enemy is on screen,
+if @inrange 'enemy' 16
+  attack 'enemy'
+endif
