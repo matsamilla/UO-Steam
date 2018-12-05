@@ -1,0 +1,176 @@
+// ********************************************************************************
+// RezKillBrains by Matsamilla                                                    *
+//                                                                                *
+// This uses resurection and lighting, you will need                              *
+// "Ginseng", "Moss", "Garlic", "Mandrake", "Ash"                                 *
+// I have organizer macros set for grabbing 100 of the reg you run out of.        *
+// Set up organizer to do the same, name them as listed above.                    *
+//                                                                                *
+// Add brains and raw human flesh to scavanger, make sure heads isn't enabled if  *
+// you have them on scavanger                                                     *
+//                                                                                *
+// Also set up a macro for "Brains" to organize brains and bacon                  *
+//                                                                                *
+// On second account run this:                                                    *
+// waitforgump 0xb04c9a31 10000                                                   *
+// replygump 0xb04c9a31 1                                                         *
+// warmode 'on'                                                                   *
+// ********************************************************************************
+if not @findobject 'RezKill'
+  headmsg 'Select your Rez Kill Target'
+  promptalias 'RezKill'
+endif
+if not @findobject 'sBulkReg'
+  headmsg 'Select your bulk reg bag'
+  promptalias 'sBulkReg'
+endif
+if not @findobject 'brainBag'
+  headmsg 'Select the bag to store brains and flesh'
+  promptalias 'brainBag'
+endif
+// RESTOCK / ORGANIZER STUFFS**************************
+//Brains
+if weight 'self' > maxweight 'self'
+  pause 600
+  organizer 'Brains' 'backpack' 'brainBag'
+  while organizing
+    pause 600
+  endwhile
+endif
+//Black Pearl
+if counttype '0xf7a' '0' 'backpack' < 1
+  @useobject 'sBulkReg'
+  pause 600
+  organizer 'Pearl' 'sBulkReg' 'backpack'
+  while organizing
+    pause 600
+  endwhile
+  if counttype '0xf7a' '0' 'backpack' < 1
+    headmsg 'Out of Black Pearl'
+    stop
+  endif
+endif
+//Blood Moss
+if counttype '0xf7b' '0' 'backpack' < 1
+  @useobject 'sBulkReg'
+  pause 600
+  organizer 'Moss' 'sBulkReg' 'backpack'
+  while organizing
+    pause 600
+  endwhile
+  if counttype '0xf7b' '0' 'backpack' < 1
+    headmsg 'Out of Blood Moss'
+    stop
+  endif
+endif
+//Ginseng
+if counttype '0xf85' '0' 'backpack' < 1
+  @useobject 'sBulkReg'
+  pause 600
+  organizer 'Ginseng' 'sBulkReg' 'backpack'
+  while organizing
+    pause 600
+  endwhile
+  if counttype '0xf85' '0' 'backpack' < 1
+    headmsg 'Out of Ginseng'
+    stop
+  endif
+endif
+//Mandrake
+if counttype '0xf86' '0' 'backpack' < 1
+  @useobject 'sBulkReg'
+  pause 600
+  organizer 'Mandrake' 'sBulkReg' 'backpack'
+  while organizing
+    pause 600
+  endwhile
+  if counttype '0xf86' '0' 'backpack' < 1
+    headmsg 'Out of Mandrake'
+    stop
+  endif
+endif
+//Nightshade
+if counttype '0xf88' '0' 'backpack' < 1
+  @useobject 'sBulkReg'
+  pause 600
+  organizer 'Nightshade' 'sBulkReg' 'backpack'
+  while organizing
+    pause 600
+  endwhile
+  if counttype '0xf88' '0' 'backpack' < 1
+    headmsg 'Out of Nightshade'
+    stop
+  endif
+endif
+//Garlic
+if counttype '0xf84' '0' 'backpack' < 1
+  @useobject 'sBulkReg'
+  pause 600
+  organizer 'Garlic' 'sBulkReg' 'backpack'
+  while organizing
+    pause 600
+  endwhile
+  if counttype '0xf84' '0' 'backpack' < 1
+    headmsg 'Out of Garlic'
+    stop
+  endif
+endif
+//Sulfurous Ash
+if counttype '0xf8c' '0' 'backpack' < 1
+  @useobject 'sBulkReg'
+  pause 600
+  organizer 'Ash' 'sBulkReg' 'backpack'
+  while organizing
+    pause 600
+  endwhile
+  if counttype '0xf8c' '0' 'backpack' < 1
+    headmsg 'Out of Sulfuric Ash'
+    stop
+  endif
+endif
+// Spiders Silk 0xf8d
+if counttype '0xf8d' '0' 'backpack' < 1
+  @useobject 'sBulkReg'
+  pause 600
+  organizer 'Spider' 'sBulkReg' 'backpack'
+  while organizing
+    pause 600
+  endwhile
+  if counttype '0xf8c' '0' 'backpack' < 1
+    headmsg 'Out of Spiders Silk'
+    stop
+  endif
+endif
+//******************************************
+// Cut corpse! *****************************
+if findtype 0x2006 'any' 'world' 'any' 2
+  usetype 0xf52
+  waitfortarget 3500
+  target! 'found'
+endif
+//******************************************
+//Rez him, kill him ************************
+if mana 'self' < 40
+  useskill 'Meditation'
+  while mana 'self' < maxmana 'self'
+  endwhile
+endif
+if @inrange 'RezKill' 1 and hits 'RezKill' < 1
+  cast 'Resurrection'
+  waitfortarget 5000
+  target! RezKill
+  pause 500
+else
+  cast 'Lightning'
+  waitfortarget 5000
+  target! RezKill
+  pause 500
+endif
+//******************************************
+// Cut Corpse ******************************
+if findtype 0x2006 'any' 'world' 'any' 2
+  usetype 0xf52
+  waitfortarget 3500
+  target! 'found'
+endif
+// ******************************************
