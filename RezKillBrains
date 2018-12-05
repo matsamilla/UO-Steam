@@ -159,12 +159,12 @@ if @inrange 'RezKill' 1 and hits 'RezKill' < 1
   cast 'Resurrection'
   waitfortarget 5000
   target! RezKill
-  pause 500
+  pause 1000
 else
   cast 'Lightning'
   waitfortarget 5000
   target! RezKill
-  pause 500
+  pause 1000
 endif
 //******************************************
 // Cut Corpse ******************************
