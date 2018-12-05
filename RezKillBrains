@@ -9,7 +9,8 @@
 // Add brains and raw human flesh to scavanger, make sure heads isn't enabled if  *
 // you have them on scavanger                                                     *
 //                                                                                *
-// Also set up a macro for "Brains" to organize brains and bacon                  *
+// Also set up a organizer for "Brains" add brains and bacon(human flesh)         *
+// for when you're overweight it'll unload brains & bacon to bag                  *
 //                                                                                *
 // On second account run this:                                                    *
 // waitforgump 0xb04c9a31 10000                                                   *
