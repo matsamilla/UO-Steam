@@ -38,6 +38,7 @@ endif
 if dead
   stop
 endif
+// Set Fishing Pole
 if not @findobject 'pole'
   if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
     setalias 'pole' 'found'
@@ -59,110 +60,113 @@ for 0 to 'xaxis'
           ignoreobject 'found'
           unsetalias 'found'
         endif
-        if @inlist 'scan' 'Yes' or @inlist 'scan' 'yes'
-          msg 'scan the horizons'
+      endif
+      // Scan the Horizons
+      if @inlist 'scan' 'Yes' or @inlist 'scan' 'yes'
+        msg 'scan the horizons'
+      endif
+      // Set Fishing Pole
+      if not @findobject 'pole'
+        if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
+          setalias 'pole' 'found'
+          pause 600
+        else
+          msg 'No Fishing Pole found'
+          playsound 'error.wav'
+          pause 10000
         endif
-        if not @findobject 'pole'
-          if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
-            setalias 'pole' 'found'
+      endif
+      @canceltarget
+      @useobject 'pole'
+      waitfortarget 2000
+      targettileoffset! 'xaxis[]' 'yaxis[]' 0
+      pause 500
+      if not @injournal 'biting' 'system'
+        pause 7750
+      endif
+      if @injournal 'pull a bottle' 'system'
+        clearjournal
+        headmsg 'GOT ONE'
+        playsound 'cheer.wav'
+      endif
+      // I don't know what this line does
+      if @injournal 'mess' 'system'
+        clearjournal
+        @usetype! 0xdd6
+        pause 1000
+        @usetype! 0xdd6
+        pause 1000
+      endif
+      if @injournal 'closer' 'system'
+        clearjournal
+        resync
+      endif
+      //fishing cleanup
+      if weight >= maxweight
+        msg 'Scan the Horizons'
+        for 0 to 'fish'
+          while @findtype fish[] 'any' 'backpack'
+            usetype! 0xf52
+            waitfortarget 1000
+            target! 'found'
             pause 600
-          else
-            msg 'No Fishing Pole found'
-            playsound 'error.wav'
-            pause 10000
-          endif
+          endwhile
+        endfor
+        // adds to fishsteak pile on floor
+        if @findtype 0x97a 'any' 'ground' 'any' 2
+          movetype 0x97a 'backpack' 'found'
+          pause 600
+        else
+          //starts fishsteak pile on floor if doesnt exist
+          movetypeoffset 0x97a 'backpack'  'ground'
+          pause 600
         endif
-        @canceltarget
-        @useobject 'pole'
-        waitfortarget 2000
-        targettileoffset! 'xaxis[]' 'yaxis[]' 0
-        pause 500
-        if not @injournal 'biting' 'system'
-          pause 7750
-        endif
-        if @injournal 'pull a bottle' 'system'
-          clearjournal
-          headmsg 'GOT ONE'
-          playsound 'cheer.wav'
-        endif
-        //playmacro 'Fishing Bottle'
-        if @injournal 'mess' 'system'
-          clearjournal
-          @usetype! 0xdd6
-          pause 1000
-          @usetype! 0xdd6
-          pause 1000
-        endif
-        if @injournal 'closer' 'system'
-          clearjournal
-          resync
-        endif
-        //fishing cleanup
-        if weight >= maxweight
-          msg 'Scan the Horizons'
-          for 0 to 'fish'
-            while @findtype fish[] 'any' 'backpack'
-              usetype! 0xf52
-              waitfortarget 1000
-              target! 'found'
-              pause 600
+      endif
+      //end fishing cleanup
+      while poisoned 'self'
+        autotargetself
+        cast 'Cure'
+        pause 2000
+      endwhile
+      while diffhits > 30 and not dead
+        autotargetself
+        bigheal
+        pause 1500
+        //if not @findobject 'lefthand'
+        //equipitem 'bow' 2
+        //endif
+      endwhile
+      //attack sea serp
+      getenemy 'murderer' 'enemy' 'criminal' 'gray' 'closest'
+      while @inrange 'enemy' 10
+        if @inlist 'attack' 'Yes' or @inlist 'attack' 'yes'
+          @autotargetenemy
+          cast 'Energy Bolt'
+          pause 2700
+          if mana < 20 'self'
+            useskill 'Meditation'
+            while mana < 30 'self'
             endwhile
-          endfor
-          // adds to fishsteak pile on floor
-          if @findtype 0x97a 'any' 'ground' 'any' 2
-            movetype 0x97a 'backpack' 'found'
-            pause 600
-          else
-            //starts fishsteak pile on floor if doesnt exist
-            movetypeoffset 0x97a 'backpack'  'ground'
-            pause 600
           endif
         endif
-        //end fishing cleanup
-        while poisoned 'self'
-          autotargetself
-          cast 'Cure'
-          pause 2000
-        endwhile
+        pause 600
+        if @inlist 'mobsound' 'Yes' or @inlist 'mobsound' 'yes'
+          if timer 'Sound Timer' > 10000
+            playsound 'bell.wav'
+            settimer 'Sound Timer' 0
+          endif
+        endif
         while diffhits > 30 and not dead
           autotargetself
           bigheal
           pause 1500
-          //if not @findobject 'lefthand'
-          //equipitem 'bow' 2
-          //endif
-        endwhile
-        //attack sea serp
-        getenemy 'murderer' 'enemy' 'criminal' 'gray' 'closest'
-        while @inrange 'enemy' 10
-          if @inlist 'attack' 'Yes' or @inlist 'attack' 'yes'
-            @autotargetenemy
-            cast 'Energy Bolt'
-            pause 2700
-            if mana < 20 'self'
-              useskill 'Meditation'
-              while mana < 30 'self'
-              endwhile
-            endif
-          endif
-          pause 600
-          if @inlist 'mobsound' 'Yes' or @inlist 'mobsound' 'yes'
-            if timer 'Sound Timer' > 10000
-              playsound 'bell.wav'
-              settimer 'Sound Timer' 0
-            endif
-          endif
-          while diffhits > 30 and not dead
-            autotargetself
-            bigheal
-            pause 1500
-          endwhile
         endwhile
       endwhile
-      clearjournal
-    endfor
+    endwhile
     clearjournal
   endfor
-  msg 'forward'
-  pause 4000
-  msg 'stop'
+  clearjournal
+endfor
+msg 'forward'
+pause 4000
+msg 'stop'
