@@ -6,14 +6,15 @@
 @createlist 'scan'
 @clearlist 'skin'
 @createlist 'skin'
-//****************************
-//********* SETUP ************
+@clearlist 'track'
+@createlist 'track'
+//********* SETUP ****************************************
 pushlist 'mobsound' 'yes' // yes for mob sound, no for no sound.
 pushlist 'attack' 'yes' // yes to attack, no for no attack
-pushlist 'scan' 'yes' // yes scan horizons, no dont
+pushlist 'scan' 'yes' // yes to scan the horizons
 pushlist 'skin' 'yes' // Skin serps? yes to do so
-//****************************
-//****************************
+pushlist 'track' 'no' //yes to train skills
+//********************************************************
 if not timerexists 'Sound Timer'
   createtimer 'Sound Timer'
   settimer 'Sound Timer' 10000
@@ -64,6 +65,16 @@ for 0 to 'xaxis'
       // Scan the Horizons
       if @inlist 'scan' 'Yes' or @inlist 'scan' 'yes'
         msg 'scan the horizons'
+      endif
+      // Tracking 
+      if @inlist 'track' 'Yes' or @inlist 'track' 'yes'
+        if timer 'SkillTimer' > 10500
+          useskill tracking
+          waitforgump 0xb16e7d71 2000
+          replygump 0xb16e7d71 4
+          pause 800
+          settimer 'SkillTimer' 0
+        endif
       endif
       // Set Fishing Pole
       if not @findobject 'pole'
