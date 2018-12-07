@@ -4,11 +4,14 @@
 @createlist 'scan'
 @clearlist 'attack'
 @createlist 'attack'
+@clearlist 'skin'
+@createlist 'skin'
 //****************************
 //********* SETUP ************
 pushlist 'mobsound' 'no' // yes for mob sound, no for no sound.
 pushlist 'attack' 'yes' // yes to attack, no for no attack
 pushlist 'scan' 'no' // yes scan horizons, no dont
+pushlist 'skin' 'yes' // Skin serps? yes to do so
 //****************************
 //****************************
 if not timerexists 'Sound Timer'
@@ -71,12 +74,24 @@ endif
 for 0 to 'xaxis'
   for 0 to 'yaxis'
     while not @injournal 'biting' 'system'
+    // Skin serps
+      if @inlist 'skin' 'Yes' or @inlist 'skin' 'yes'
+        if @findtype 0x2006 'any' 'ground' 'any' 2
+          usetype 0xf52
+          waitfortarget 3500
+          target! 'found'
+          ignoreobject 'found'
+          unsetalias 'found'
+        endif
+      endif
+      // Scan the Horizons
       if @inlist 'scan' 'Yes' or @inlist 'scan' 'yes'
         msg 'scan the horizons'
       endif
       if not @findobject 'lefthand'
         equipitem 'bow' 2
       endif
+      // Reset pole
       if not @findobject 'pole'
         if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
           setalias 'pole' 'found'
@@ -95,6 +110,7 @@ for 0 to 'xaxis'
       if not @injournal 'biting' 'system'
         pause 7750
       endif
+      //Cheer
       if @injournal 'pull a bottle' 'system'
         clearjournal
         headmsg 'GOT ONE'
@@ -132,9 +148,9 @@ for 0 to 'xaxis'
         endif
       endif
       //end fishing cleanup
-      //if not @findobject 'lefthand'
-      //equipitem 'bow' 2
-      //endif
+      if not @findobject 'lefthand'
+        equipitem 'bow' 2
+      endif
       //attack sea serp
       getenemy 'murderer' 'enemy' 'criminal' 'gray' 'closest'
       while @inrange 'enemy' 10
@@ -144,6 +160,7 @@ for 0 to 'xaxis'
             settimer 'Sound Timer' 0
           endif
         endif
+        // Attack!
         if @inlist 'attack' 'Yes' or @inlist 'attack' 'yes'
           attack! 'enemy'
         endif
