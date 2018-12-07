@@ -1,22 +1,20 @@
 @clearlist 'mobsound'
 @createlist 'mobsound'
-@clearlist 'scan'
-@createlist 'scan'
 @clearlist 'attack'
 @createlist 'attack'
-@clearlist 'track'
-@createlist 'track'
+@clearlist 'scan'
+@createlist 'scan'
 @clearlist 'skin'
 @createlist 'skin'
-//****************************
-//********* SETUP ************
-pushlist 'track' 'no' //yes to train skills
+@clearlist 'track'
+@createlist 'track'
+//********* SETUP ****************************************
 pushlist 'mobsound' 'yes' // yes for mob sound, no for no sound.
 pushlist 'attack' 'yes' // yes to attack, no for no attack
-pushlist 'scan' 'yes' // yes to  scan horizons
+pushlist 'scan' 'yes' // yes to scan the horizons
 pushlist 'skin' 'yes' // Skin serps? yes to do so
-//****************************
-//****************************
+pushlist 'track' 'yes' //yes to train skills
+//********************************************************
 if not timerexists 'Sound Timer'
   createtimer 'Sound Timer'
   settimer 'Sound Timer' 10000
