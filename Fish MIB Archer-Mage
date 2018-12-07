@@ -6,12 +6,15 @@
 @createlist 'attack'
 @clearlist 'track'
 @createlist 'track'
+@clearlist 'skin'
+@createlist 'skin'
 //****************************
 //********* SETUP ************
 pushlist 'track' 'no' //yes to train skills
 pushlist 'mobsound' 'yes' // yes for mob sound, no for no sound.
 pushlist 'attack' 'yes' // yes to attack, no for no attack
-pushlist 'scan' 'yes' // yes scan horizons, no dont
+pushlist 'scan' 'yes' // yes to  scan horizons
+pushlist 'skin' 'yes' // Skin serps? yes to do so
 //****************************
 //****************************
 if not timerexists 'Sound Timer'
@@ -65,6 +68,7 @@ endif
 if not @findobject 'bow'
   promptalias 'bow'
 endif
+// Update Pole
 if not @findobject 'pole'
   if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
     setalias 'pole' 'found'
@@ -78,6 +82,17 @@ endif
 for 0 to 'xaxis'
   for 0 to 'yaxis'
     while not @injournal 'biting' 'system'
+      // Skin serps
+      if @inlist 'skin' 'Yes' or @inlist 'skin' 'yes'
+        if @findtype 0x2006 'any' 'ground' 'any' 2
+          usetype 0xf52
+          waitfortarget 3500
+          target! 'found'
+          ignoreobject 'found'
+          unsetalias 'found'
+        endif
+      endif
+      // Tracking 
       if @inlist 'track' 'Yes' or @inlist 'track' 'yes'
         if timer 'SkillTimer' > 10500
           useskill tracking
@@ -87,12 +102,14 @@ for 0 to 'xaxis'
           settimer 'SkillTimer' 0
         endif
       endif
+      // Scan The Horizons
       if @inlist 'scan' 'Yes' or @inlist 'scan' 'yes'
         msg 'scan the horizons'
       endif
       if not @findobject 'lefthand'
         equipitem 'bow' 2
       endif
+      // Update Pole
       if not @findobject 'pole'
         if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
           setalias 'pole' 'found'
