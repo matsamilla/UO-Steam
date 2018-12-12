@@ -1,0 +1,75 @@
+// T-Map Unloader by MatsaMilla
+// Use this to unlaod all those bags you just filled T-mapping
+// Select the chests to sort them into and let her rip
+// *This assumes you used my T-Map Organizer macro.
+// And uses organizers and alias's from it.
+if not @findobject 'RegBag'
+  headmsg 'Select the unload bag of Regs'
+  promptalias 'RegBag'
+endif
+if not @findobject 'ArmorBag'
+  headmsg 'Select the unload bag of Armor'
+  promptalias 'ArmorBag'
+endif
+if not @findobject 'WepBag'
+  headmsg 'Select the unload bag of Weapons'
+  promptalias 'WepBag'
+endif
+if not @findobject 'GemBag'
+  headmsg 'Select the unload bag of Gems'
+  promptalias 'GemBag'
+endif
+if not @findobject 'ScrollBag'
+  headmsg 'Select the unload bag of Scrolls'
+  promptalias 'ScrollBag'
+endif
+if not @findobject 'BoneChest'
+  headmsg 'Select the unload bag of Armor'
+  promptalias 'BoneChest'
+endif
+if not @findobject 'GoldChest'
+  headmsg 'Select a Chest for Gold'
+  promptalias 'GoldChest'
+endif
+if not @findobject 'ArmorChest'
+  headmsg 'Select a chest for Armor'
+  promptalias 'ArmorChest'
+endif
+if not @findobject 'WepChest'
+  headmsg 'Select a chest for Weapons'
+  promptalias 'WepChest'
+endif
+if not @findobject 'GemChest'
+  headmsg 'Select a chest for Gems'
+  promptalias 'GemChest'
+endif
+if not @findobject 'regchest'
+  headmsg 'Select a chest for Regs'
+  promptalias 'regchest'
+endif
+if not @findobject 'scrollchest'
+  headmsg 'Select a chest for Scrolls'
+  promptalias 'scrollchest'
+endif
+while @movetype 0xeed 'backpack' 'GoldChest'
+  pause 1000
+endwhile
+organizer 'Gems' 'gembag' 'gemchest'
+while organizing
+endwhile
+organizer 'Regs' 'RegBag' 'regchest'
+while organizing
+endwhile
+organizer 'BoneArmor' 'armorbag' 'bonechest'
+while organizing
+endwhile
+organizer 'Armor' 'armorbag' 'armorchest'
+while organizing
+endwhile
+organizer 'Weapons' 'wepbag' 'wepchest'
+while organizing
+endwhile
+organizer 'Scrolls' 'scrollbag' 'scrollchest'
+while organizing
+endwhile
+headmsg 'Done Unloading'
