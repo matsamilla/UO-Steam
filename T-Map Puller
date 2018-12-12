@@ -267,11 +267,12 @@ while hits < 80
   bigheal 'self'
   pause 1500
 endwhile
+// LOOT
 for 0 to Loot
   if @inrange 'Chest' 2
-    if @movetype Loot[] 'Chest' 'backpack'
+    while @movetype Loot[] 'Chest' 'backpack'
       pause 1000
-    endif
+    endwhile
   endif
   while hits < 80
     bigheal 'self'
@@ -282,11 +283,12 @@ for 0 to Loot
     stop
   endif
 endfor
+// GEMS
 for 0 to Gems
   if @inrange 'Chest' 2
-    if @movetype Gems[] 'Chest' 'GemBag'
+    while @movetype Gems[] 'Chest' 'GemBag'
       pause 900
-    endif
+    endwhile
   endif
   while hits < 80
     bigheal 'self'
@@ -297,11 +299,12 @@ for 0 to Gems
     stop
   endif
 endfor
+// WEAPONS
 for 0 to Weps
   if @inrange 'Chest' 2
-    if @movetype Weps[] 'Chest' 'WepBag'
+    while @movetype Weps[] 'Chest' 'WepBag'
       pause 900
-    endif
+    endwhile
   endif
   while hits < 80
     bigheal 'self'
@@ -312,11 +315,12 @@ for 0 to Weps
     stop
   endif
 endfor
+// ARMOR
 for 0 to Armor
   if @inrange 'Chest' 2
-    if @movetype Armor[] 'Chest' 'ArmorBag'
+    while @movetype Armor[] 'Chest' 'ArmorBag'
       pause 900
-    endif
+    endwhile
   endif
   while hits < 80
     bigheal 'self'
@@ -327,12 +331,13 @@ for 0 to Armor
     stop
   endif
 endfor
+// SCROLLS
 for 0 to Scrolls
   if @inrange 'Chest' 2
-    if @movetype Scrolls[] 'Chest' 'ScrollBag'
+    while @movetype Scrolls[] 'Chest' 'ScrollBag'
       pause 900
       continue
-    endif
+    endwhile
   endif
   while hits < 80
     bigheal 'self'
@@ -343,11 +348,12 @@ for 0 to Scrolls
     stop
   endif
 endfor
+// REGS
 for 0 to Regs
   if @inrange 'Chest' 2
-    if @movetype Regs[] 'Chest' 'RegBag'
+    while @movetype Regs[] 'Chest' 'RegBag'
       pause 900
-    endif
+    endwhile
   endif
   while hits < 80
     bigheal 'self'
@@ -358,11 +364,12 @@ for 0 to Regs
     stop
   endif
 endfor
+// TRASH
 for 0 to Trash
   if @inrange 'Chest' 2
-    if @movetype Trash[] 'Chest' 'TrashCan'
+    while @movetype Trash[] 'Chest' 'TrashCan'
       pause 900
-    endif
+    endwhile
   endif
   while hits < 80
     bigheal 'self'
