@@ -46,9 +46,11 @@ if not @findobject 'GemBag'
   headmsg 'Select a bag for Gems'
   promptalias 'GemBag'
 endif
-if not @findobject 'ScrollBag'
-  headmsg 'Select a bag for Scrolls'
-  promptalias 'ScrollBag'
+if @inlist 'keepscrolls' 'Yes' or @inlist 'keepscrolls' 'yes'
+  if not @findobject 'ScrollBag'
+    headmsg 'Select a bag for Scrolls'
+    promptalias 'ScrollBag'
+  endif
 endif
 if not @findobject 'Chest' and not inrange 'Chest' 2
   headmsg 'Select Treasure Chest'
@@ -147,6 +149,21 @@ while organizing
   endif
   if weight >= maxweight
     organizer 'Armor'
+    msg "I'm Overweight! Stopping Script."
+    stop
+  endif
+endwhile
+// BoneArmor
+organizer 'BoneArmor' 'Chest' 'ArmorBag'
+while organizing
+  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+    while hits < 80
+      bigheal 'self'
+      pause 1500
+    endwhile
+  endif
+  if weight >= maxweight
+    organizer 'BoneArmor'
     msg "I'm Overweight! Stopping Script."
     stop
   endif
