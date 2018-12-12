@@ -203,7 +203,7 @@ while organizing
   endif
 endwhile
 // Trash
-organizer 'Trash' 'Chest' 'TrashCan'
+organizer 'Junk' 'Chest' 'TrashCan'
 while organizing
   if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
     while hits < 80
