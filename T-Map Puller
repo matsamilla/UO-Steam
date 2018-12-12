@@ -1,10 +1,35 @@
-@removelist 'Loot'
-@removelist 'Trash'
-@removelist 'Gems'
-@removelist 'Regs'
-@removelist 'Armor'
-@removelist 'Weps'
-@removelist 'Scrolls'
+// T-Map Pulled by / updated by MatsaMilla
+// Please check out SETUP SECTION
+@clearlist 'healself'
+@createlist 'healself'
+@clearlist 'keepscrolls'
+@createlist 'keepscrolls'
+@clearlist 'beetle'
+@createlist 'beetle'
+//
+//********* SETUP ***********************************
+//
+pushlist 'keepscrolls' 'no'// yes to keep, no to trash
+pushlist 'healself' 'no' // yes to heal/cure self if getting damaged
+pushlist 'beetle' 'no' // yes if you have beetle, will loot gold and put gold on beetle
+//
+//***************************************************
+//
+if @inlist 'beetle' 'Yes' or @inlist 'beetle' 'yes'
+  if not @findalias 'beetlebag'
+    headmsg 'Select your beetle'
+    if mounted 'self'
+      useobject 'self'
+      pause 600
+    endif
+    promptalias 'beetlebag'
+    pause 600
+    if not mounted
+      useobject 'beetlebag'
+      pause 600
+    endif
+  endif
+endif
 if not @findobject 'Chest' and not inrange 'Chest' 2
   promptalias 'Chest'
 endif
@@ -24,9 +49,11 @@ if not @findobject 'GemBag'
   headmsg 'Select a bag for Gems'
   promptalias 'GemBag'
 endif
-if not @findobject 'ScrollBag'
-  headmsg 'Select a bag for Scrolls'
-  promptalias 'ScrollBag'
+if @inlist 'keepscrolls' 'Yes' or @inlist 'keepscrolls' 'yes'
+  if not @findobject 'ScrollBag'
+    headmsg 'Select a bag for Scrolls'
+    promptalias 'ScrollBag'
+  endif
 endif
 if not listexists 'Loot'
   createlist 'Loot'
@@ -263,10 +290,30 @@ pushlist 'Scrolls' 0x1f6c // Summon Water Elemental
 @pushlist 'Trash' '0xe81'
 useobject 'Chest'
 pause 900
-while hits < 80
-  bigheal 'self'
-  pause 1500
-endwhile
+// Heals toon if 'yes' above
+if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+  while hits < 80
+    bigheal 'self'
+    pause 1500
+  endwhile
+endif
+// GOLD to Beetle
+if @inlist 'beetle' 'Yes' or @inlist 'beetle' 'yes'
+  if @inrange 'Chest' 2 and @findtype 0xeed 'any' 'Chest' 'beetlebag'
+    if mounted 'self'
+      useobject 'self'
+      pause 600
+    endif
+    while @movetype 0xeed 'Chest' 'beetlebag'
+      pause 600
+    endwhile
+    pause 600
+    if not mounted
+      useobject 'beetlebag'
+      pause 600
+    endif
+  endif
+endif
 // LOOT
 for 0 to Loot
   if @inrange 'Chest' 2
@@ -274,10 +321,12 @@ for 0 to Loot
       pause 1000
     endwhile
   endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
-  endwhile
+  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+    while hits < 80
+      bigheal 'self'
+      pause 1500
+    endwhile
+  endif
   if not @inrange 'Chest' '2'
     headmsg 'Stopping...'
     stop
@@ -302,14 +351,16 @@ endfor
 // WEAPONS
 for 0 to Weps
   if @inrange 'Chest' 2
-    while @movetype Weps[] 'Chest' 'WepBag'
+    if @movetype Weps[] 'Chest' 'WepBag'
       pause 900
+    endif
+  endif
+  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+    while hits < 80
+      bigheal 'self'
+      pause 1500
     endwhile
   endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
-  endwhile
   if not @inrange 'Chest' '2'
     headmsg 'Stopping...'
     stop
@@ -322,10 +373,12 @@ for 0 to Armor
       pause 900
     endwhile
   endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
-  endwhile
+  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+    while hits < 80
+      bigheal 'self'
+      pause 1500
+    endwhile
+  endif
   if not @inrange 'Chest' '2'
     headmsg 'Stopping...'
     stop
@@ -339,10 +392,12 @@ for 0 to Scrolls
       continue
     endwhile
   endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
-  endwhile
+  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+    while hits < 80
+      bigheal 'self'
+      pause 1500
+    endwhile
+  endif
   if not @inrange 'Chest' '2'
     headmsg 'Stopping...'
     stop
@@ -355,10 +410,12 @@ for 0 to Regs
       pause 900
     endwhile
   endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
-  endwhile
+  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+    while hits < 80
+      bigheal 'self'
+      pause 1500
+    endwhile
+  endif
   if not @inrange 'Chest' '2'
     headmsg 'Stopping...'
     stop
@@ -371,13 +428,15 @@ for 0 to Trash
       pause 900
     endwhile
   endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
-  endwhile
+  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+    while hits < 80
+      bigheal 'self'
+      pause 1500
+    endwhile
+  endif
   if not @inrange 'Chest' '2'
     headmsg 'Stopping...'
     stop
   endif
 endfor
-msg 'Loot possibly Aquired!'
+msg 'All done, go home!'
