@@ -46,28 +46,34 @@ endif
 if not timerexists 'bandie'
   settimer 'bandie' 10000
 endif
-// provoke protection if target cursor exists
-if not targetexists
-  //Starts healing your pets
-  if @injournal 'finish applying' 'system' or timer 'bandie' >= 10000
-    if @findobject 'Pet1' and @findobject 'Pet2'
-      if hits 'Pet1' < 90 or hits 'Pet2' < 90
-        if diffhits 'Pet1' > diffhits 'Pet2' and @inrange 'Pet1' 1
+//Starts healing your pets
+if @injournal 'finish applying' 'system' or timer 'bandie' >= 10000
+  if @findobject 'Pet1' and @findobject 'Pet2'
+    if hits 'Pet1' < 90 or hits 'Pet2' < 90
+      if diffhits 'Pet1' > diffhits 'Pet2' and @inrange 'Pet1' 1
+        // protection if target cursor exists
+        if not targetexists
           usetype 0xe21 'any' 'backpack'
           waitfortarget 3500
           target! 'Pet1'
           settimer 'bandie' 0
-        elseif @inrange 'Pet2' 1 and hits 'Pet2' < 90
+        endif
+      elseif @inrange 'Pet2' 1 and hits 'Pet2' < 90
+        // protection if target cursor exists
+        if not targetexists
           usetype 0xe21 'any' 'backpack'
           waitfortarget 3500
           target! 'Pet2'
           settimer 'bandie' 0
         endif
-        clearjournal
-        pause 1000
       endif
-    elseif @findobject 'Pet1' or @findobject 'Pet2'
-      if hits 'found' < 90 and @inrange 'found' 1
+      clearjournal
+      pause 1000
+    endif
+  elseif @findobject 'Pet1' or @findobject 'Pet2'
+    if hits 'found' < 90 and @inrange 'found' 1
+      // protection if target cursor exists
+      if not targetexists
         usetype 0xe21 'any' 'backpack'
         waitfortarget 3500
         target! 'found'
@@ -81,5 +87,6 @@ endif
 if @injournal 'too far away' 'system'
   @clearjournal
 elseif @injournal 'stay close enough' 'system'
+  headmsg 'Stay Closer Next Time!'
   @clearjournal
 endif
