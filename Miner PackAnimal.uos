@@ -1,0 +1,66 @@
+// By MatsaMilla
+// Use with a pack animal(s). Target animal, once full target next
+// or go to forge.
+if not @findalias 'Beetle3'
+  promptalias 'Beetle3'
+endif
+while not dead 'self'
+  if @findtype '0x19b9' 'any' 'ground' 'any' '2'
+    playsound 'error.wav'
+    headmsg 'Your packer is full of shit'
+    promptalias 'Beetle3'
+    @movetype 0x19b9 'ground' 'Beetle3'
+  endif
+  if @counttype 0x19b9 'any' 'backpack' < 188
+    @movetype 0x19b9 'backpack' 'Beetle3'
+  endif
+  if @findtype '0xf39' 'any' 'backpack' 'any' '2'
+    @usetype '0xf39' '0'  'backpack' '1' 1
+  elseif @findtype '0xe86' 'any' 'backpack' 'any' '2'
+    @usetype '0xe86' 'any' 'backpack' 'any' '2'
+  endif
+  waitfortarget 5000
+  if direction == 0
+    targettileoffset 0 -1 0
+  elseif direction == 1
+    targettileoffset 1 -1 0
+  elseif direction == 2
+    targettileoffset 1 0 0
+  elseif direction == 3
+    targettileoffset 1 1 0
+  elseif direction == 4
+    targettileoffset 0 1 0
+  elseif direction == 5
+    targettileoffset -1 1 0
+  elseif direction == 6
+    targettileoffset -1 0 0
+  elseif direction == 7
+    targettileoffset -1 -1 0
+  else
+    headmsg 'No Tools Found!'
+  endif
+  pause 600
+  if @injournal 'no metal' 'system'
+    msg '[e whistle'
+    headmsg 'Time to Move'
+    pause 2000
+    @clearjournal
+  endif
+  while weight >= 380
+    headmsg 'Time to Smelt'
+    pause 1000
+    while weight > maxweight
+      cast 'bless'
+      autotargetself!
+      pause 2500
+      if weight >= 425
+        headmsg 'OVER MAX GO SMELT'
+      endif
+    endwhile
+  endwhile
+  if @findtype '0x19b9' 'any' 'backpack' 'any' '2' and weight >= 300
+    usetype 0x19b9 //iron
+    //  @moveitem 'found' 'mount'
+    pause 600
+  endif
+endwhile
