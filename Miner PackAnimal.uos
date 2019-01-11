@@ -1,6 +1,8 @@
 // By MatsaMilla
 // Use with a pack animal(s). Target animal, once full target next
 // or go to forge.
+// Mines in direction toon is facing, when out of 
+// ore in area he wisltes for you to move him.
 if not @findalias 'Beetle3'
   promptalias 'Beetle3'
 endif
