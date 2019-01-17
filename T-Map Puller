@@ -84,6 +84,11 @@ pushlist 'Loot' 0x2260 //Skill Scrolls
 pushlist 'Loot' 0xeed // Gold
 pushlist 'Loot' 0x1f4c //Recall
 pushlist 'Loot' 0x1f66 // Energy Vortex
+pushlist 'Scrolls' 0x1f68 // Summon Air Elemental
+pushlist 'Scrolls' 0x1f69 // Summon Daemon
+pushlist 'Scrolls' 0x1f6a // Summon Earth Elemental
+pushlist 'Scrolls' 0x1f6b // Summon Fire Elemental
+pushlist 'Scrolls' 0x1f6c // Summon Water Elemental
 pushlist 'Regs' 0xf7a // Black Pearl
 pushlist 'Regs' 0xf7b // Blood Moss
 pushlist 'Regs' 0xf86 // Mandrake Root
@@ -261,11 +266,11 @@ pushlist 'Scrolls' 0x1f64 // Polymorph
 pushlist 'Scrolls' 0x1f65 // Earthquake
 //pushlist 'Scrolls' 0x1f66 // Energy Vortex
 pushlist 'Scrolls' 0x1f67 // Ressurrection
-pushlist 'Scrolls' 0x1f68 // Summon Air Elemental
-pushlist 'Scrolls' 0x1f69 // Summon Daemon
-pushlist 'Scrolls' 0x1f6a // Summon Earth Elemental
-pushlist 'Scrolls' 0x1f6b // Summon Fire Elemental
-pushlist 'Scrolls' 0x1f6c // Summon Water Elemental
+//pushlist 'Scrolls' 0x1f68 // Summon Air Elemental
+//pushlist 'Scrolls' 0x1f69 // Summon Daemon
+//pushlist 'Scrolls' 0x1f6a // Summon Earth Elemental
+//pushlist 'Scrolls' 0x1f6b // Summon Fire Elemental
+//pushlist 'Scrolls' 0x1f6c // Summon Water Elemental
 //Trash
 @pushlist 'Trash' '0x171c'
 @pushlist 'Trash' '0x1717'
