@@ -1,7 +1,6 @@
-// This will pull all 
-
-s onto your body...
-
+// Target chests where you want stuff to be sorted to.
+// Target MIB chest (will have to every time script runs)
+// Sit back & watch it sort.
 @removelist 'Loot'
 @removelist 'Trash'
 @removelist 'Gems'
