@@ -445,3 +445,5 @@ for 0 to Trash
   endif
 endfor
 msg 'All done, go home!'
+pause 400
+msg 'Brought to you by MatsaMilla'
