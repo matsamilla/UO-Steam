@@ -11,7 +11,7 @@
 //
 pushlist 'keepscrolls' 'no'// yes to keep, no to trash
 pushlist 'healself' 'no' // yes to heal/cure self if getting damaged
-pushlist 'beetle' 'no' // yes if you have beetle, will loot gold and put gold on beetle
+pushlist 'beetle' 'yes' // yes if you have beetle, will loot gold and put gold on beetle
 //
 //***************************************************
 //
@@ -49,11 +49,9 @@ if not @findobject 'GemBag'
   headmsg 'Select a bag for Gems'
   promptalias 'GemBag'
 endif
-if @inlist 'keepscrolls' 'Yes' or @inlist 'keepscrolls' 'yes'
-  if not @findobject 'ScrollBag'
-    headmsg 'Select a bag for Scrolls'
-    promptalias 'ScrollBag'
-  endif
+if not @findobject 'ScrollBag'
+  headmsg 'Select a bag for Scrolls'
+  promptalias 'ScrollBag'
 endif
 if not listexists 'Loot'
   createlist 'Loot'
@@ -84,11 +82,11 @@ pushlist 'Loot' 0x2260 //Skill Scrolls
 pushlist 'Loot' 0xeed // Gold
 pushlist 'Loot' 0x1f4c //Recall
 pushlist 'Loot' 0x1f66 // Energy Vortex
-pushlist 'Scrolls' 0x1f68 // Summon Air Elemental
-pushlist 'Scrolls' 0x1f69 // Summon Daemon
-pushlist 'Scrolls' 0x1f6a // Summon Earth Elemental
-pushlist 'Scrolls' 0x1f6b // Summon Fire Elemental
-pushlist 'Scrolls' 0x1f6c // Summon Water Elemental
+pushlist 'Loot' 0x1f68 // Summon Air Elemental
+pushlist 'Loot' 0x1f69 // Summon Daemon
+pushlist 'Loot' 0x1f6a // Summon Earth Elemental
+pushlist 'Loot' 0x1f6b // Summon Fire Elemental
+pushlist 'Loot' 0x1f6c // Summon Water Elemental
 pushlist 'Regs' 0xf7a // Black Pearl
 pushlist 'Regs' 0xf7b // Blood Moss
 pushlist 'Regs' 0xf86 // Mandrake Root
@@ -324,17 +322,17 @@ for 0 to Loot
   if @inrange 'Chest' 2
     while @movetype Loot[] 'Chest' 'backpack'
       pause 1000
+      if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+        while hits < 80
+          bigheal 'self'
+          pause 1500
+        endwhile
+      endif
+      if not @inrange 'Chest' '2'
+        headmsg 'Stopping...'
+        stop
+      endif
     endwhile
-  endif
-  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
-    while hits < 80
-      bigheal 'self'
-      pause 1500
-    endwhile
-  endif
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
   endif
 endfor
 // GEMS
@@ -342,33 +340,35 @@ for 0 to Gems
   if @inrange 'Chest' 2
     while @movetype Gems[] 'Chest' 'GemBag'
       pause 900
+      if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+        while hits < 80
+          bigheal 'self'
+          pause 1500
+        endwhile
+      endif
+      if not @inrange 'Chest' '2'
+        headmsg 'Stopping...'
+        stop
+      endif
     endwhile
-  endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
-  endwhile
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
   endif
 endfor
 // WEAPONS
 for 0 to Weps
   if @inrange 'Chest' 2
-    if @movetype Weps[] 'Chest' 'WepBag'
+    while @movetype Weps[] 'Chest' 'WepBag'
       pause 900
-    endif
-  endif
-  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
-    while hits < 80
-      bigheal 'self'
-      pause 1500
+      if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+        while hits < 80
+          bigheal 'self'
+          pause 1500
+        endwhile
+      endif
+      if not @inrange 'Chest' '2'
+        headmsg 'Stopping...'
+        stop
+      endif
     endwhile
-  endif
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
   endif
 endfor
 // ARMOR
@@ -376,54 +376,73 @@ for 0 to Armor
   if @inrange 'Chest' 2
     while @movetype Armor[] 'Chest' 'ArmorBag'
       pause 900
+      if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+        while hits < 80
+          bigheal 'self'
+          pause 1500
+        endwhile
+      endif
+      if not @inrange 'Chest' '2'
+        headmsg 'Stopping...'
+        stop
+      endif
     endwhile
-  endif
-  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
-    while hits < 80
-      bigheal 'self'
-      pause 1500
-    endwhile
-  endif
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
   endif
 endfor
 // SCROLLS
-for 0 to Scrolls
-  if @inrange 'Chest' 2
-    while @movetype Scrolls[] 'Chest' 'ScrollBag'
-      pause 900
-      continue
-    endwhile
-  endif
-  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
-    while hits < 80
-      bigheal 'self'
-      pause 1500
-    endwhile
-  endif
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
-  endif
-endfor
+if @inlist 'keepscrolls' 'Yes' or @inlist 'keepscrolls' 'yes'
+  for 0 to Scrolls
+    if @inrange 'Chest' 2
+      while @movetype Scrolls[] 'Chest' 'ScrollBag'
+        pause 900
+        if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+          while hits < 80
+            bigheal 'self'
+            pause 1500
+          endwhile
+        endif
+        if not @inrange 'Chest' '2'
+          headmsg 'Stopping...'
+          stop
+        endif
+      endwhile
+    endif
+  endfor
+else
+  for 0 to Scrolls
+    if @inrange 'Chest' 2
+      while @movetype Scrolls[] 'Chest' 'trashcan'
+        pause 900
+        if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+          while hits < 80
+            bigheal 'self'
+            pause 1500
+          endwhile
+        endif
+        if not @inrange 'Chest' '2'
+          headmsg 'Stopping...'
+          stop
+        endif
+      endwhile
+    endif
+  endfor
+endif
 // REGS
 for 0 to Regs
   if @inrange 'Chest' 2
     while @movetype Regs[] 'Chest' 'RegBag'
       pause 900
+      if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+        while hits < 80
+          bigheal 'self'
+          pause 1500
+        endwhile
+      endif
+      if not @inrange 'Chest' '2'
+        headmsg 'Stopping...'
+        stop
+      endif
     endwhile
-  endif
-  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
-    while hits < 80
-      bigheal 'self'
-      pause 1500
-    endwhile
-  endif
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
   endif
 endfor
 // TRASH
@@ -431,19 +450,17 @@ for 0 to Trash
   if @inrange 'Chest' 2
     while @movetype Trash[] 'Chest' 'TrashCan'
       pause 900
+      if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
+        while hits < 80
+          bigheal 'self'
+          pause 1500
+        endwhile
+      endif
+      if not @inrange 'Chest' '2'
+        headmsg 'Stopping...'
+        stop
+      endif
     endwhile
-  endif
-  if @inlist 'healself' 'Yes' or @inlist 'healself' 'yes'
-    while hits < 80
-      bigheal 'self'
-      pause 1500
-    endwhile
-  endif
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
   endif
 endfor
-msg 'All done, go home!'
-pause 400
-msg 'Brought to you by MatsaMilla'
+msg 'All done, possibly...'
