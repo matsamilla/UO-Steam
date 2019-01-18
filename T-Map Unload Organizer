@@ -3,28 +3,9 @@
 // Select the chests to sort them into and let her rip
 // *This assumes you used my T-Map Organizer macro.
 // And uses organizers and alias's from it.
-if not @findobject 'RegBag'
-  headmsg 'Select the unload bag of Regs'
-  promptalias 'RegBag'
-endif
-if not @findobject 'ArmorBag'
-  headmsg 'Select the unload bag of Armor'
-  promptalias 'ArmorBag'
-endif
-if not @findobject 'WepBag'
-  headmsg 'Select the unload bag of Weapons'
-  promptalias 'WepBag'
-endif
-if not @findobject 'GemBag'
-  headmsg 'Select the unload bag of Gems'
-  promptalias 'GemBag'
-endif
-if not @findobject 'ScrollBag'
-  headmsg 'Select the unload bag of Scrolls'
-  promptalias 'ScrollBag'
-endif
+@clearjournal
 if not @findobject 'BoneChest'
-  headmsg 'Select the unload bag of Armor'
+  headmsg 'Select a Chest for Bone Armor'
   promptalias 'BoneChest'
 endif
 if not @findobject 'GoldChest'
@@ -56,20 +37,87 @@ while @movetype 0xeed 'backpack' 'GoldChest'
 endwhile
 organizer 'Gems' 'gembag' 'gemchest'
 while organizing
+  if @injournal 'cannot hold' 'system'
+    organizer 'Gems' 'gembag' 'gemchest'
+    playsound 'error.wav'
+    msg 'gemchest Chest Full, select another'
+    promptalias 'gemchest'
+    pause 600
+    @clearjournal
+    organizer 'Gems' 'gembag' 'gemchest'
+  endif
 endwhile
-organizer 'Regs' 'RegBag' 'regchest'
+organizer 'Unload Regs' 'regbag' 'regchest'
 while organizing
+  if @injournal 'cannot hold' 'system'
+    organizer 'Unload Regs' 'regbag' 'regchest'
+    playsound 'error.wav'
+    msg 'regchest Chest Full, select another'
+    promptalias 'regchest'
+    pause 600
+    @clearjournal
+    organizer 'Unload Regs' 'regbag' 'regchest'
+  endif
 endwhile
 organizer 'BoneArmor' 'armorbag' 'bonechest'
 while organizing
+  if @injournal 'cannot hold' 'system'
+    organizer 'BoneArmor' 'armorbag' 'bonechest'
+    playsound 'error.wav'
+    msg 'bonechest Chest Full, select another'
+    promptalias 'bonechest'
+    pause 600
+    @clearjournal
+    organizer 'BoneArmor' 'armorbag' 'bonechest'
+  endif
 endwhile
 organizer 'Armor' 'armorbag' 'armorchest'
 while organizing
+  if @injournal 'cannot hold' 'system'
+    organizer 'Armor' 'armorbag' 'armorchest'
+    playsound 'error.wav'
+    msg 'armorchest Chest Full, select another'
+    promptalias 'armorchest'
+    pause 600
+    @clearjournal
+    organizer 'Armor' 'armorbag' 'armorchest'
+  endif
 endwhile
 organizer 'Weapons' 'wepbag' 'wepchest'
 while organizing
+  if @injournal 'cannot hold' 'system'
+    organizer 'wepchest' 'wepbag' 'wepchest'
+    playsound 'error.wav'
+    msg 'wepchest Chest Full, select another'
+    promptalias 'wepchest'
+    pause 600
+    @clearjournal
+    organizer 'Weapons' 'wepbag' 'wepchest'
+  endif
 endwhile
 organizer 'Scrolls' 'scrollbag' 'scrollchest'
 while organizing
+  if @injournal 'cannot hold' 'system'
+    organizer 'Scrolls' 'scrollbag' 'scrollchest'
+    playsound 'error.wav'
+    msg 'scrollchest Chest Full, select another'
+    promptalias 'scrollchest'
+    pause 600
+    @clearjournal
+    organizer 'Scrolls' 'scrollbag' 'scrollchest'
+  endif
 endwhile
+organizer 'Maps'
+while organizing
+  if @injournal 'cannot hold' 'system'
+    organizer 'Maps'
+    playsound 'error.wav'
+    msg 'Weapon Chest Full, select another'
+    promptalias 'WepChest'
+    pause 600
+    @clearjournal
+    organizer 'Maps'
+  endif
+endwhile
+playmacro 'Spell Scroll Sorty'
 headmsg 'Done Unloading'
