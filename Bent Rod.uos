@@ -1,0 +1,148 @@
+@clearlist 'gmmake'
+@createlist 'gmmake'
+@clearlist 'howmany'
+@createlist 'howmany'
+@createlist 'rodlist'
+@createlist 'gmlist'
+//*****SETUP*****************************************
+pushlist 'gmmake' 'yes' // Yes to keep GM rods
+//***************************************************
+if list 'gmlist' > 50
+  playsound 'bell.wav'
+  pause 800
+  @clearlist 'gmlist'
+  //  playmacro 'Carp Bent Rod'
+  stop
+endif
+useobject 'self'
+pause 500
+clickobject 'bent'
+waitforcontext 0x1aa252 10 15000
+if not @findobject 'GM Rods'
+  headmsg 'Select where GM Rods go'
+  promptalias 'GM Rods'
+endif
+if not @findobject 'Bent'
+  headmsg 'Select where you wish to drop Bent Poles'
+  if mounted 'self'
+    useobject 'self'
+    pause 600
+  endif
+  promptalias 'Bent'
+endif
+if not @findobject 'Junk'
+  headmsg 'Select where you wish to dump junk poles'
+  promptalias 'Junk'
+endif
+if not @findalias 'Bent'
+  headmsg 'Select where you wish to drop Bent Poles'
+  if mounted 'self'
+    useobject 'self'
+    pause 600
+  endif
+  if not mounted
+    useobject 'Bent'
+    pause 600
+  endif
+  promptalias 'Bent'
+endif
+//=== crafting tinker tools ===
+while @counttype 0x1eb8 0 'backpack' < 2
+  usetype 0x1eb8
+  waitforgump 0x38920abd 2000
+  @replygump 0x38920abd 8
+  waitforgump 0x38920abd 2000
+  @replygump 0x38920abd 23
+  waitforgump 0x38920abd 2000
+endwhile
+//crafting Saws
+while @counttype 0x1034 0 'backpack' < 2
+  usetype 0x1eb8
+  waitforgump 0x38920abd 15000
+  replygump 0x38920abd 8
+  waitforgump 0x38920abd 15000
+  replygump 0x38920abd 51
+  waitforgump 0x38920abd 15000
+  usetype 0x1034
+endwhile
+//Find Carpentry Tools
+if not @findobject 'Carp Tool'
+  if @findtype '0x10e5' 'any' 'backpack' 'any' '3' or @findtype '0x1034' 'any' 'backpack' 'any' '3'
+    setalias 'Carp Tool' 'found'
+    pause 600
+  else
+    headmsg 'No tool found'
+  endif
+endif
+//Craft Pole
+if not mounted
+  useobject 'Bent'
+  pause 600
+endif
+@useobject 'Carp Tool'
+waitforgump 0x38920abd 15000
+replygump 0x38920abd 22
+waitforgump 0x38920abd 15000
+replygump 0x38920abd 37
+waitforgump 0x38920abd 15000
+pause 600
+while @findtype '0xdbf' 'any' 'backpack' 'any' '1'
+  if not hidden 'self'
+    useskill 'Hiding'
+  endif
+  clickobject 'found'
+  pause 800
+  //bent rods
+  if @injournal 'a bent rod' 'system'
+    headmsg 'Bent Rod!!!!'
+    sysmsg 'Bent Rod' 69
+    // playsound 'error.wav'
+    pushlist 'rodlist' 1
+    if mounted
+      useobject 'self'
+      pause 1000
+    endif
+    moveitem 'found' 'Bent'
+    pause 1000
+    if not mounted
+      useobject 'Bent'
+      pause 1000
+    endif
+    @ignoreobject 'found'
+    @unsetalias 'found'
+    @clearjournal
+    // **GM Rods**
+  elseif @inlist 'gmmake' 'yes' or @inlist 'gmlist' 'Yes'
+    if @injournal 'Exceptional' 'system'
+      headmsg 'Exceptional'
+      pushlist 'gmlist' 1
+      useobject 'self'
+      pause 800
+      moveitem 'found' 'GM Rods'
+      pause 800
+      if not mounted
+        useobject 'Bent'
+        pause 1000
+        @ignoreobject 'found'
+        @unsetalias 'found'
+        @clearjournal
+      endif
+    endif
+  else @injournal 'fishing pole' 'system'
+    headmsg 'Junk Pole'
+    moveitem 'found' 'Junk'
+    pause 800
+    @ignoreobject 'found'
+    @unsetalias 'found'
+    @clearjournal
+  endif
+endwhile
+if @counttype 0x1bd7 0 'backpack' < 4
+  headmsg 'Out of Mats'
+  stop
+endif
+if list 'rodlist' > 50
+  playsound 'cheer.wav'
+  //msg '[e whistle'
+  //clearlist 'rodlist'
+endif
