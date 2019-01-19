@@ -1,0 +1,80 @@
+// This will toss any 9 or 10 charge books
+// must have beetle, good books go on beetle
+
+if not @findobject 'Junk'
+  headmsg 'Select where you wish to dump junk books'
+  promptalias 'Junk'
+endif
+if not @findalias 'beetle'
+  headmsg 'Select where you wish to drop GOOD runebooks'
+  if mounted 'self'
+    useobject 'self'
+    pause 600
+  endif
+  promptalias 'beetle'
+  pause 600
+  if not mounted
+    useobject 'beetle'
+    pause 600
+  endif
+endif
+if counttype '0x1f60' 'any' 'backpack' == 0
+  headmsg 'Need More Gate Scrolls!'
+  stop
+endif
+if counttype '0x1f4c' 'any' 'backpack' == 0
+  headmsg 'Need More Recall Scrolls!'
+  stop
+endif
+if counttype '0x1f14' 'any' 'backpack' == 0
+  headmsg 'Need More Blank Runes!'
+  stop
+endif
+if counttype '0xef3' 'any' 'backpack' < 8
+  headmsg 'Need more Blank Scrolls!'
+  stop
+endif
+if counttype '0xfbf' 'any' 'backpack' == 0
+  headmsg 'Need More Pens!'
+  stop
+endif
+usetype '0xfbf' 'any' 'backpack' '1'
+waitforgump 0x38920abd 5000
+replygump 0x38920abd 57
+waitforgump 0x38920abd 5000
+replygump 0x38920abd 2
+waitforgump 0x38920abd 5000
+pause 800
+while @findtype '0x22c5' '1121' 'backpack' 'any' '1'
+  clickobject 'found'
+  pause 800
+  if @injournal '[9 Charges]' 'system'
+    moveitem 'found' 'Junk'
+    pause 800
+    @ignoreobject 'found'
+    @unsetalias 'found'
+    @clearjournal
+  elseif @injournal '[10 Charges]' 'system'
+    headmsg 'Junk book'
+    moveitem 'found' 'Junk'
+    pause 800
+    @ignoreobject 'found'
+    @unsetalias 'found'
+    @clearjournal
+  else
+    headmsg 'Got a good one!!'
+    if mounted
+      useobject 'self'
+      pause 1000
+    endif
+    moveitem 'found' 'beetle'
+    pause 1000
+    if not mounted
+      useobject 'beetle'
+      pause 1000
+    endif
+    @ignoreobject 'found'
+    @unsetalias 'found'
+    @clearjournal
+  endif
+endwhile
