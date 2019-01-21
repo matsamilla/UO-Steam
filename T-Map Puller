@@ -1,5 +1,6 @@
 // T-Map Puller by that one guy & updated by MatsaMilla
 // Please check out SETUP SECTION
+// This will keep recalls, gate scrolls, and lvl 8 scrolls no matter what.
 @clearlist 'healself'
 @createlist 'healself'
 @clearlist 'keepscrolls'
