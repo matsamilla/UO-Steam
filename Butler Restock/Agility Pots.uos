@@ -1,11 +1,11 @@
 // agility = blood moss 0xf7b
 // bottle 0xf08
-if not listexists ('potcount')
-  createlist 'potcount'
+if not @listexists 'potcount'
+  @createlist 'potcount'
 endif
 // WILL MAKE HOWEVER MANY YOU PUT
 // AS NUMBER IN NEXT LINE
-if list 'potcount' > 1000 // EDIT THIS NUMBER
+if list 'potcount' > 500
   clearlist 'potcount'
   stop
 endif
