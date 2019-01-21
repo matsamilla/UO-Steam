@@ -1,7 +1,6 @@
 // Refresh = ginseng 0xf85
 // bottle 0xf0c
 if not @listexists 'potcount'
-  msg 'what'
   @createlist 'potcount'
 endif
 // WILL MAKE HOWEVER MANY YOU PUT
