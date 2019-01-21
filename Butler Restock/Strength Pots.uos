@@ -6,9 +6,7 @@ endif
 // WILL MAKE HOWEVER MANY YOU PUT
 // AS NUMBER IN NEXT LINE
 if list 'potcount' > 1000 // EDIT THIS NUMBER
-  //playsound 'cheer.wav'
-  //msg '[e whistle'
-  clearlist 'recalllist'
+  clearlist 'potcount'
   stop
 endif
 if not @findobject 'restock'
