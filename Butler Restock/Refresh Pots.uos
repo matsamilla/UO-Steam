@@ -1,11 +1,11 @@
 // Refresh = pearl 0xf7a
 // bottle 0xf09
-if not listexists ('potcount')
-  createlist 'potcount'
+if not @listexists 'potcount'
+  @createlist 'potcount'
 endif
 // WILL MAKE HOWEVER MANY YOU PUT
 // AS NUMBER IN NEXT LINE
-if list 'potcount' > 1000 // EDIT THIS NUMBER
+if list 'potcount' > 500
   clearlist 'potcount'
   stop
 endif
