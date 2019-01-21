@@ -1,0 +1,63 @@
+// Refresh = ash 0xf8c
+// bottle 0xf0d
+if not listexists ('potcount')
+  createlist 'potcount'
+endif
+if list 'potcount' > 2000
+  clearlist 'recalllist'
+  stop
+endif
+if not @findobject 'restock'
+  msg 'restock chest'
+  promptalias 'restock'
+endif
+if not @findobject 'mortarBag'
+  msg 'Mortar Bag'
+  promptalias 'mortarBag'
+endif
+if not @findobject 'butler'
+  msg 'Select Butler'
+  promptalias 'butler'
+endif
+if not @findobject 'EXP'
+  headmsg 'Select Explode Keg'
+  promptalias 'EXP'
+endif
+// restock ash
+if @counttype 0xf8c 'any' 'backpack' < 10
+  if @movetype 0xf8c 'restock' 'backpack' 0 0 0 'any' 500
+    pause 1500
+  else
+    sysmsg 'Out of ash!' 25
+    @canceltarget
+    stop
+  endif
+endif
+// restock mortars 0xe9b
+if @counttype 0xe9b 'any' 'backpack' == 0
+  if @movetype 0xe9b 'mortarBag' 'backpack' 0 0 0 'any' 1
+    pause 1500
+  else
+    sysmsg 'Out of mortars!' 25
+    @canceltarget
+    stop
+  endif
+endif
+if @usetype 0xe9b 0x0 'backpack'
+  waitforgump 0x38920abd 15000
+  replygump 0x38920abd 50
+  waitforgump 0x38920abd 15000
+  replygump 0x38920abd 16
+  waitforgump 0x38920abd 15000
+endif
+//move to butler
+if @injournal 'hold any more!' 'system'
+  moveitem 'EXP' 'butler'
+  pause 1000
+  @clearjournal
+endif
+if @findtype 0xf0d 0x0 'backpack'
+  moveitem 'found' 'EXP'
+  pause 1000
+  pushlist 'potcount' 1
+endif
