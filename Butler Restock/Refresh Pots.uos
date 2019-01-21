@@ -3,7 +3,9 @@
 if not listexists ('potcount')
   createlist 'potcount'
 endif
-if list 'potcount' > 2000
+// WILL MAKE HOWEVER MANY YOU PUT
+// AS NUMBER IN NEXT LINE
+if list 'potcount' > 1000 // EDIT THIS NUMBER
   clearlist 'potcount'
   stop
 endif
