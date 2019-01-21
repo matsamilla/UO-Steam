@@ -61,5 +61,5 @@ endif
 if @findtype 0xf0c 0x0 'backpack'
   moveitem 'found' 'GH'
   pause 1000
-  @pushlist 'potcount' 1
+  pushlist 'potcount' 1
 endif
