@@ -1,11 +1,12 @@
 // Refresh = ginseng 0xf85
 // bottle 0xf0c
-if not listexists ('potcount')
-  createlist 'potcount'
+if not @listexists 'potcount'
+  msg 'what'
+  @createlist 'potcount'
 endif
 // WILL MAKE HOWEVER MANY YOU PUT
 // AS NUMBER IN NEXT LINE
-if list 'potcount' > 1000 // EDIT THIS NUMBER
+if list 'potcount' > 500
   clearlist 'potcount'
   stop
 endif
@@ -61,5 +62,5 @@ endif
 if @findtype 0xf0c 0x0 'backpack'
   moveitem 'found' 'GH'
   pause 1000
-  pushlist 'potcount' 1
+  @pushlist 'potcount' 1
 endif
