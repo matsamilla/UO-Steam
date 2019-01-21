@@ -31,6 +31,7 @@ if @inlist 'beetle' 'Yes' or @inlist 'beetle' 'yes'
   endif
 endif
 if not @findobject 'Chest' and not inrange 'Chest' 2
+  msg 'Select the Treasure Chest'
   promptalias 'Chest'
 endif
 if not @findobject 'RegBag'
