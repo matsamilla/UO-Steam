@@ -12,7 +12,7 @@
 //
 pushlist 'keepscrolls' 'no'// yes to keep, no to trash
 pushlist 'healself' 'no' // yes to heal/cure self if getting damaged
-pushlist 'beetle' 'yes' // yes if you have beetle, will loot gold and put gold on beetle
+pushlist 'beetle' 'no' // yes if you have beetle, will loot gold and put gold on beetle
 //
 //***************************************************
 //
