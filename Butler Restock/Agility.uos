@@ -1,0 +1,64 @@
+// agility = blood moss 0xf7b
+// bottle 0xf08
+if not listexists ('potcount')
+  createlist 'potcount'
+endif
+if list 'potcount' > 2000
+  //playsound 'cheer.wav'
+  //msg '[e whistle'
+  clearlist 'recalllist'
+  stop
+endif
+if not @findobject 'restock'
+  msg 'restock chest'
+  promptalias 'restock'
+endif
+if not @findobject 'mortarBag'
+  msg 'Mortar Bag'
+  promptalias 'mortarBag'
+endif
+if not @findobject 'butler'
+  msg 'Select Butler'
+  promptalias 'butler'
+endif
+if not @findobject 'AG'
+  headmsg 'Select Greater Agility Keg'
+  promptalias 'AG'
+endif
+// restock Moss
+if @counttype 0xf7b 'any' 'backpack' < 10
+  if @movetype 0xf7b 'restock' 'backpack' 0 0 0 'any' 500
+    pause 1500
+  else
+    sysmsg 'Out of Blood Moss!' 25
+    @canceltarget
+    stop
+  endif
+endif
+// restock mortars 0xe9b
+if @counttype 0xe9b 'any' 'backpack' == 0
+  if @movetype 0xe9b 'mortarBag' 'backpack' 0 0 0 'any' 1
+    pause 1500
+  else
+    sysmsg 'Out of mortars!' 25
+    @canceltarget
+    stop
+  endif
+endif
+if @usetype 0xe9b 0x0 'backpack'
+  waitforgump 0x38920abd 15000
+  replygump 0x38920abd 8
+  waitforgump 0x38920abd 15000
+  replygump 0x38920abd 9
+  waitforgump 0x38920abd 15000
+endif
+while @findtype 0xf08 0x0 'backpack'
+  moveitem 'found' 'AG'
+  pause 1000
+  pushlist 'potcount' 1
+  if @injournal 'hold any more' 'system'
+    moveitem 'AG' 'butler'
+    pause 1000
+    @clearjournal
+  endif
+endwhile
