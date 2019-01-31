@@ -1,0 +1,29 @@
+//This checks health to make sure you don't die
+// have another account running a bandage script
+// on toon training with this.
+while not dead
+  if mana < 50
+    useskill 'meditation'
+    while mana < maxmana
+    endwhile
+  endif
+  if hits < 50
+    pause 7000
+    while hits < maxhits
+    endwhile
+  endif
+  //Set Goal
+  if skill 'Magery' == 100
+    stop
+  endif
+  if skill 'Magery' < 50
+    cast 'Bless' 'self'
+  elseif skill 'Magery' < 62.9
+    cast 'Lightning' 'self'
+  elseif skill 'Magery' < 82.9
+    cast 'Energy Bolt' 'self'
+  elseif skill 'Magery' < 100
+    cast 'Flame Strike' 'self'
+  endif
+  pause '2700'
+endwhile
