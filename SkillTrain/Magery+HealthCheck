@@ -18,9 +18,9 @@ while not dead
   endif
   if skill 'Magery' < 50
     cast 'Bless' 'self'
-  elseif skill 'Magery' < 62.9
+  elseif skill 'Magery' < 60
     cast 'Lightning' 'self'
-  elseif skill 'Magery' < 82.9
+  elseif skill 'Magery' < 85
     cast 'Energy Bolt' 'self'
   elseif skill 'Magery' < 100
     cast 'Flame Strike' 'self'
