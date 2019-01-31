@@ -35,17 +35,16 @@ if skill 'magery' < 100
     headmsg 'Magery complete!'
     stop
   endif
-endif
 elseif skill 'resisting spells' < 100
-if mana <= 45
-  useskill 'Meditation'
-  while mana < maxmana
-  endwhile
+  if mana <= 45
+    useskill 'Meditation'
+    while mana < maxmana
+    endwhile
+  else
+    cast 'mana vampire' 'self'
+    pause 1000
+  endif
 else
-  cast 'mana vampire' 'self'
-  pause 1000
-endif
-else
-headmsg 'Magery and resisting spells complete!'
-stop
+  headmsg 'Magery and resisting spells complete!'
+  stop
 endif
