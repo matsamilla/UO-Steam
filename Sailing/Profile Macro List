@@ -1,0 +1,19 @@
+ <macros> 
+  <macro interrupt="True" loop="False" name="forward">msg 'forward';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="stop">msg 'stop';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="backwards">msg 'backwards';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="turn left">msg 'turn left';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="turn right">msg 'turn right';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="left">msg 'left';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="right">msg 'right';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="forward left">msg 'forward left';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="forward right">msg 'forward right';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="back left">msg 'backward left';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="back right">msg 'backward right';pause 200;msg 'scan the horizons';playmacro 'Vet';</macro>
+  <macro interrupt="True" loop="False" name="fire left">msg 'FIRE LEFT';</macro>
+  <macro interrupt="True" loop="False" name="fire right">msg 'FIRE RIGHT';</macro>
+  <macro interrupt="True" loop="False" name="turn around">msg 'turn around';</macro>
+  <macro interrupt="True" loop="False" name="Scan">msg 'scan the horizons';</macro>
+  <macro interrupt="True" loop="False" name="disembark">msg 'drop anchor';pause 200;msg 'disembark';</macro>
+  <macro interrupt="True" loop="False" name="Embark">msg 'embark';pause 200;msg 'raise anchor';</macro>
+ </macros>
