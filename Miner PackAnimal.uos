@@ -17,9 +17,11 @@ while not dead 'self'
     @movetype 0x19b9 'backpack' 'Beetle3'
   endif
   if @findtype '0xf39' 'any' 'backpack' 'any' '2'
-    @usetype '0xf39' '0'  'backpack' '1' 1
+    @usetype '0xf39' 'any'  'backpack' '1' 1
   elseif @findtype '0xe86' 'any' 'backpack' 'any' '2'
     @usetype '0xe86' 'any' 'backpack' 'any' '2'
+  elseif @findtype '0xe85' 'any' 'backpack' 'any' '2'
+    @usetype '0xe85' 'any'  'backpack' '1' 1
   endif
   waitfortarget 5000
   if direction == 0
