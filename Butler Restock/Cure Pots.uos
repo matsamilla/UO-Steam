@@ -1,11 +1,11 @@
-// Refresh = ginseng 0xf85
-// bottle 0xf0c
+// Cure = Garlic 0xf84
+// bottle 0xf07
 if not @listexists 'potcount'
   @createlist 'potcount'
 endif
 // WILL MAKE HOWEVER MANY YOU PUT
 // AS NUMBER IN NEXT LINE
-if list 'potcount' > 500
+if list 'potcount' > 2000
   clearlist 'potcount'
   stop
 endif
@@ -21,13 +21,13 @@ if not @findobject 'butler'
   msg 'Select Butler'
   promptalias 'butler'
 endif
-if not @findobject 'GH'
-  headmsg 'Select Heal Keg'
-  promptalias 'GH'
+if not @findobject 'GC'
+  headmsg 'Select Cure Keg'
+  promptalias 'GC'
 endif
-// restock ginseng
-if @counttype 0xf85 'any' 'backpack' < 10
-  if @movetype 0xf85 'restock' 'backpack' 0 0 0 'any' 500
+// restock garlic
+if @counttype 0xf84 'any' 'backpack' < 10
+  if @movetype 0xf84 'restock' 'backpack' 0 0 0 'any' 500
     pause 1500
   else
     sysmsg 'Out of ginseng!' 25
@@ -47,19 +47,19 @@ if @counttype 0xe9b 'any' 'backpack' == 0
 endif
 if @usetype 0xe9b 0x0 'backpack'
   waitforgump 0x38920abd 15000
-  replygump 0x38920abd 22
+  replygump 0x38920abd 43
   waitforgump 0x38920abd 15000
   replygump 0x38920abd 16
   waitforgump 0x38920abd 15000
 endif
 //move to butler
 if @injournal 'hold any more!' 'system'
-  moveitem 'GH' 'butler'
+  moveitem 'GC' 'butler'
   pause 1000
   @clearjournal
 endif
-if @findtype 0xf0c 0x0 'backpack'
-  moveitem 'found' 'GH'
+if @findtype 0xf07 0x0 'backpack'
+  moveitem 'found' 'GC'
   pause 1000
   @pushlist 'potcount' 1
 endif
