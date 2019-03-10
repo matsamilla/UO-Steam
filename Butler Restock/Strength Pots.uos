@@ -1,4 +1,4 @@
-// agility = mandrake root 0xf86
+// Strength = mandrake root 0xf86
 // bottle 0xf08
 if not @listexists 'potcount'
   @createlist 'potcount'
