@@ -1,4 +1,4 @@
-// Refresh = ginseng 0xf85
+// Heal = ginseng 0xf85
 // bottle 0xf0c
 if not @listexists 'potcount'
   @createlist 'potcount'
