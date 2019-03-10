@@ -1,4 +1,4 @@
-// Refresh = ash 0xf8c
+// Explode = ash 0xf8c
 // bottle 0xf0d
 if not @listexists 'potcount'
   @createlist 'potcount'
