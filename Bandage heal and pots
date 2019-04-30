@@ -1,14 +1,7 @@
-// Auto Attack & Heal by MatsaMilla
-// Attacks nearest, and heals with aides & chugs
+// Auto Heal by MatsaMilla
 // Run this w/ dexxer, will toggle left hand to chug
-// pots, don't run w/ archer.
+// this will toggle bows, sorry
 while not dead
-  //Get Enemy Grey Only
-  getenemy 'gray' 'criminal' 'closest'
-  if @inrange 'enemy' '10'
-    attack! 'enemy'
-    @clearusequeue
-  endif
   if not timerexists 'Bandage Timer'
     createtimer 'Bandage Timer'
     settimer 'Bandage Timer' 10500
