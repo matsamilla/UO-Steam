@@ -1,0 +1,52 @@
+// Auto Attack & Heal by MatsaMilla
+// Attacks nearest, and heals with aides & chugs pots
+// use with an archer with healing for best results
+while not dead
+  //Get Enemy Grey Only
+  getenemy 'gray' 'criminal' 'closest'
+  if @inrange 'enemy' '10'
+    attack! 'enemy'
+    @clearusequeue
+  endif
+  if not timerexists 'Bandage Timer'
+    createtimer 'Bandage Timer'
+    settimer 'Bandage Timer' 10500
+  endif
+  // Check the bandage timer to see if enough time has elapsed
+  if timer 'Bandage Timer' < 10500
+    // Small delay to slow down the loop. 100 milliseconds means we will not miss
+    // a bandage.
+    pause 100
+    // We need to wait for our current bandage to finish so start the while
+    // loop from the beginning
+    continue
+  endif
+  // If we are poisoned or don't have full health
+  if hits < maxhits
+    pause 150
+    // Enough time has elapsed lets apply a bandage.
+    bandageself
+    // Reset the timer.
+    settimer 'Bandage Timer' 0
+  endif
+  if @injournal 'encumbered' 'system'
+    usetype! 0xf0e
+    // pause 250
+    clearjournal
+  endif
+  if poisoned 'self'
+    // Cure potion
+    usetype! 0xf07
+    pause 150
+  endif
+  if stam < 19
+    usetype! 0xf0b
+    pause 150
+  endif
+  if hits < 25
+    usetype! 0xf0c
+    pause 150
+    guildmsg 'Oh shit I gonna die!'
+    pause 150
+  endif
+endwhile
