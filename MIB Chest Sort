@@ -1,31 +1,41 @@
-// Target chests where you want stuff to be sorted to.
-// Target MIB chest (will have to every time script runs)
-// Sit back & watch it sort.
 @removelist 'Loot'
 @removelist 'Trash'
 @removelist 'Gems'
 @removelist 'Regs'
 @removelist 'Armor'
+@removelist 'BoneArmor'
 @removelist 'Weps'
 @removelist 'Scrolls'
 promptalias 'Chest'
 if not @findobject 'RegChest'
-  headmsg 'Select a bag for Regs'
+  headmsg 'Select a chest for Regs'
   promptalias 'RegChest'
 endif
+if not @findobject 'BoneChest'
+  headmsg 'Select a Chest for Bone Armor'
+  promptalias 'BoneChest'
+endif
+if not @findobject 'NetChest'
+  headmsg 'Select a chest for Nets'
+  promptalias 'NetChest'
+endif
+if not @findobject 'GoldChest'
+  headmsg 'Select a Chest for Gold'
+  promptalias 'GoldChest'
+endif
 if not @findobject 'ArmorChest'
-  headmsg 'Select a bag for Armor'
+  headmsg 'Select a chest for Armor'
   promptalias 'ArmorChest'
 endif
 if not @findobject 'WepChest'
-  headmsg 'Select a bag for Weapons'
+  headmsg 'Select a chest for Weapons'
   promptalias 'WepChest'
 endif
 if not @findobject 'GemChest'
-  headmsg 'Select a GemChest for Gems'
+  headmsg 'Select a chest for Gems'
   promptalias 'GemChest'
 endif
-if not @findobject 'Chest'
+if not @findobject 'ScrollChest'
   headmsg 'Select a bag for Scrolls'
   promptalias 'ScrollChest'
 endif
@@ -41,6 +51,9 @@ endif
 if not listexists 'Armor'
   createlist 'Armor'
 endif
+if not listexists 'BoneArmor'
+  createlist 'BoneArmor'
+endif
 if not listexists 'Weps'
   createlist 'Weps'
 endif
@@ -54,8 +67,11 @@ if not @findobject 'TrashCan' or not @inrange 'TrashCan' '3'
   headmsg 'Select a corpse to dump Trash in'
   promptalias 'TrashCan'
 endif
+if not hidden 'self'
+  useskill 'Hiding'
+endif
 pushlist 'Loot' 0x2260 //Skill Scrolls
-pushlist 'Loot' 0xeed // Gold
+//pushlist 'Loot' 0xeed // Gold
 pushlist 'Loot' 0x1f4c //Recall
 pushlist 'Loot' 0x1f66 // Energy Vortex
 pushlist 'Regs' 0xf7a // Black Pearl
@@ -76,6 +92,10 @@ pushlist 'Gems' 0xf10 // Emerald
 pushlist 'Gems' 0xf26 // Diamond
 pushlist 'Gems' 0xf2d // Tourmaline
 pushlist 'Gems' 0xf13 // Ruby
+pushlist 'Gems' 0xdf5 // Wands
+pushlist 'Gems' 0xdf3 // Wands
+pushlist 'Gems' 0xdf4 // Wands
+pushlist 'Gems' 0xdf2 // Wands
 //Weps
 @pushlist 'Weps' 0xe87 //Pitchfork
 @pushlist 'Weps' 0xec3 //Cleaver
@@ -170,12 +190,12 @@ pushlist 'Gems' 0xf13 // Ruby
 @pushlist 'Armor' 0x1c06 //Female Leather Armor
 @pushlist 'Armor' 0x1c0a //Female Leather Bustier
 //Bone
-@pushlist 'Armor' 0x1451 //Bone Helmet
-@pushlist 'Armor' 0x144f //Bone Tunic
-@pushlist 'Armor' 0x144e //Bone Sleeves
-@pushlist 'Armor' 0x1450 //Bone Glove
-@pushlist 'Armor' 0x1452 //Bone Legs
-@pushlist 'Armor' 0x1f0b //orc helm
+@pushlist 'BoneArmor' 0x1451 //Bone Helmet
+@pushlist 'BoneArmor' 0x144f //Bone Tunic
+@pushlist 'BoneArmor' 0x144e //Bone Sleeves
+@pushlist 'BoneArmor' 0x1450 //Bone Glove
+@pushlist 'BoneArmor' 0x1452 //Bone Legs
+@pushlist 'BoneArmor' 0x1f0b //orc helm
 // Spell Scrolls
 pushlist 'Scrolls' 0x1f2d // Reactive Armor
 pushlist 'Scrolls' 0x1f2e // Clumsy
@@ -262,116 +282,82 @@ pushlist 'Scrolls' 0x1f6c // Summon Water Elemental
 @pushlist 'Trash' '0x1716'
 @pushlist 'Trash' '0x171c'
 @pushlist 'Trash' '0xe81'
+@pushlist 'Trash' 0xe86 // Pickaxe
 useobject 'Chest'
 pause 900
 while hits < 80
   bigheal 'self'
   pause 1500
 endwhile
+if not @inrange 'Chest' '2'
+  headmsg 'Chest out of range, Stopping...'
+  stop
+endif
 for 0 to Loot
-  if @inrange 'Chest' 2
-    if @movetype Loot[] 'Chest' 'backpack'
-      pause 1000
-    endif
-  endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
+  while @movetype 0xdca 'Chest' 'NetChest'
+    pause 1000
   endwhile
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
-  endif
+  while @movetype 0xeed 'Chest' 'GoldChest'
+    pause 1000
+  endwhile
+  while @movetype Loot[] 'Chest' 'backpack'
+    pause 1000
+  endwhile
 endfor
 for 0 to Gems
-  if @inrange 'Chest' 2
-    if @movetype Gems[] 'Chest' 'GemChest'
-      pause 900
-    endif
-  endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
+  while @movetype Gems[] 'Chest' 'GemChest'
+    pause 900
   endwhile
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
-  endif
 endfor
 for 0 to Weps
-  if @inrange 'Chest' 2
-    if @movetype Weps[] 'Chest' 'WepChest'
-      pause 900
+  while @movetype Weps[] 'Chest' 'WepChest'
+    if @injournal 'cannot hold' 'system'
+      playsound 'error.wav'
+      msg 'Weapon Chest Full, select another'
+      promptalias 'WepChest'
+      pause 600
+      @clearjournal
     endif
-  endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
+    pause 900
   endwhile
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
-  endif
 endfor
 for 0 to Armor
-  if @inrange 'Chest' 2
-    if @movetype Armor[] 'Chest' 'ArmorChest'
-      pause 900
+  while @movetype Armor[] 'Chest' 'ArmorChest'
+    if @injournal 'cannot hold' 'system'
+      playsound 'error.wav'
+      msg 'Armor Chest Full, select another'
+      promptalias 'ArmorChest'
+      pause 600
+      @clearjournal
     endif
-  endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
+    pause 900
   endwhile
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
-  endif
+endfor
+for 0 to BoneArmor
+  while @movetype BoneArmor[] 'Chest' 'BoneChest'
+    if @injournal 'cannot hold' 'system'
+      playsound 'error.wav'
+      msg 'BoneChest Chest Full, select another'
+      promptalias 'BoneChest'
+      @clearjournal
+    endif
+    pause 900
+  endwhile
 endfor
 for 0 to Scrolls
-  if @inrange 'Chest' 2
-    if @movetype Scrolls[] 'Chest' 'Scrollchest'
-      pause 900
-      continue
-    endif
-  endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
+  while @movetype Scrolls[] 'Chest' 'ScrollChest'
+    pause 900
   endwhile
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
-  endif
 endfor
 for 0 to Regs
-  if @inrange 'Chest' 2
-    if @movetype Regs[] 'Chest' 'RegChest'
-      pause 900
-    endif
-  endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
+  while @movetype Regs[] 'Chest' 'RegChest'
+    pause 900
   endwhile
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
-  endif
 endfor
 for 0 to Trash
-  if @inrange 'Chest' 2
-    if @movetype Trash[] 'Chest' 'TrashCan'
-      pause 900
-    endif
-  endif
-  while hits < 80
-    bigheal 'self'
-    pause 1500
+  while @movetype Trash[] 'Chest' 'TrashCan'
+    pause 900
   endwhile
-  if not @inrange 'Chest' '2'
-    headmsg 'Stopping...'
-    stop
-  endif
 endfor
-msg 'Loot Aquired!'
+//msg 'Loot Aquired!'
+playsound 'bell.wav'
