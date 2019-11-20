@@ -6,14 +6,14 @@
 @createlist 'scan'
 @clearlist 'skin'
 @createlist 'skin'
-@clearlist 'track'
-@createlist 'track'
+@clearlist 'drive'
+@createlist 'drive'
 //********* SETUP ****************************************
-pushlist 'mobsound' 'yes' // yes for mob sound, no for no sound.
+pushlist 'mobsound' 'no' // yes for mob sound, no for no sound.
 pushlist 'attack' 'yes' // yes to attack, no for no attack
-pushlist 'scan' 'yes' // yes to scan the horizons
+pushlist 'scan' 'no' // yes to scan the horizons
 pushlist 'skin' 'yes' // Skin serps? yes to do so
-pushlist 'track' 'no' //yes to train skills
+pushlist 'drive' 'no' // yes to drive boat
 //********************************************************
 if not timerexists 'Sound Timer'
   createtimer 'Sound Timer'
@@ -66,16 +66,6 @@ for 0 to 'xaxis'
       if @inlist 'scan' 'Yes' or @inlist 'scan' 'yes'
         msg 'scan the horizons'
       endif
-      // Tracking 
-      if @inlist 'track' 'Yes' or @inlist 'track' 'yes'
-        if timer 'SkillTimer' > 10500
-          useskill tracking
-          waitforgump 0xb16e7d71 2000
-          replygump 0xb16e7d71 4
-          pause 800
-          settimer 'SkillTimer' 0
-        endif
-      endif
       // Set Fishing Pole
       if not @findobject 'pole'
         if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
@@ -114,7 +104,6 @@ for 0 to 'xaxis'
       endif
       //fishing cleanup
       if weight >= maxweight
-        msg 'Scan the Horizons'
         for 0 to 'fish'
           while @findtype fish[] 'any' 'backpack'
             usetype! 0xf52
@@ -178,6 +167,32 @@ for 0 to 'xaxis'
   endfor
   clearjournal
 endfor
-msg 'forward'
-pause 4000
-msg 'stop'
+if @inlist 'drive' 'Yes' or @inlist 'drive' 'yes'
+  msg '[e whistle'
+  pause 200
+  msg 'Back One'
+  Pause 1000
+  msg 'Back One'
+  Pause 1000
+  msg 'Forward One'
+  Pause 1000
+  msg 'Forward One'
+  Pause 1000
+  msg 'Left One'
+  Pause 1000
+  msg 'Left One'
+  Pause 1000
+  //playsound 'pssst.wav'
+  msg 'Right One'
+  Pause 1000
+  msg 'Right One'
+  Pause 1000
+  msg 'Right One'
+  Pause 1000
+  msg 'Right One'
+  Pause 1000
+  msg 'forward'
+  pause 4500
+  msg 'stop'
+  playsound 'pssst.wav'
+endif
