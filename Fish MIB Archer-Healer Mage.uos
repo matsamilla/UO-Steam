@@ -6,22 +6,26 @@
 @createlist 'scan'
 @clearlist 'skin'
 @createlist 'skin'
-@clearlist 'track'
-@createlist 'track'
+@clearlist 'drive'
+@createlist 'drive'
 //********* SETUP ****************************************
-pushlist 'mobsound' 'yes' // yes for mob sound, no for no sound.
+pushlist 'mobsound' 'no' // yes for mob sound, no for no sound.
 pushlist 'attack' 'yes' // yes to attack, no for no attack
-pushlist 'scan' 'no' // yes to scan the horizons
-pushlist 'skin' 'no' // Skin serps? yes to do so
-pushlist 'track' 'no' //yes to train skills
+pushlist 'scan' 'yes' // yes to scan the horizons
+pushlist 'skin' 'yes' // Will skin & re-open nearby corpses
+pushlist 'drive' 'yes' // yes to drive boat
 //********************************************************
 if not timerexists 'Sound Timer'
   createtimer 'Sound Timer'
-  settimer 'Sound Timer' 7000
+  settimer 'Sound Timer' 15000
 endif
 if not timerexists 'Bandage Timer'
   createtimer 'Bandage Timer'
   settimer 'Bandage Timer' 10250
+endif
+if not findalias 'Escape Book'
+  headmsg 'Select Escape Book'
+  promptalias 'Escape Book'
 endif
 // Check the bandage timer to see if enough time has elapsed
 if timer 'Bandage Timer' < 10250
@@ -33,7 +37,7 @@ if timer 'Bandage Timer' < 10250
   continue
 endif
 // If we are poisoned or don't have full health
-if poisoned 'self' or hits < 80
+if poisoned 'self' or hits < 85
   // Enough time has elapsed lets apply a bandage.
   bandageself
   // Reset the timer.
@@ -75,14 +79,32 @@ endif
 for 0 to 'xaxis'
   for 0 to 'yaxis'
     while not @injournal 'biting' 'system'
-    // Skin serps
+      if timer 'Bandage Timer' < 10250
+        // Small delay to slow down the loop. 100 milliseconds means we will not miss
+        // a bandage.
+        pause 100
+        // We need to wait for our current bandage to finish so start the while
+        // loop from the beginning
+        continue
+      endif
+      // If we are poisoned or don't have full health
+      if poisoned 'self' or hits < 85
+        // Enough time has elapsed lets apply a bandage.
+        bandageself
+        // Reset the timer.
+        settimer 'Bandage Timer' 0
+      endif
+      // Skin serps
       if @inlist 'skin' 'Yes' or @inlist 'skin' 'yes'
         if @findtype 0x2006 'any' 'ground' 'any' 2
           usetype 0xf52
           waitfortarget 3500
           target! 'found'
+          pause 600
+          useobject 'found'
           ignoreobject 'found'
           unsetalias 'found'
+          pause 600
         endif
       endif
       // Scan the Horizons
@@ -91,16 +113,6 @@ for 0 to 'xaxis'
       endif
       if not @findobject 'lefthand'
         equipitem 'bow' 2
-      endif
-      // Tracking 
-      if @inlist 'track' 'Yes' or @inlist 'track' 'yes'
-        if timer 'SkillTimer' > 10500
-          useskill tracking
-          waitforgump 0xb16e7d71 2000
-          replygump 0xb16e7d71 4
-          pause 800
-          settimer 'SkillTimer' 0
-        endif
       endif
       // Reset pole
       if not @findobject 'pole'
@@ -125,7 +137,9 @@ for 0 to 'xaxis'
       if @injournal 'pull a bottle' 'system'
         clearjournal
         headmsg 'GOT ONE'
-        playsound 'cheer.wav'
+        if @inlist 'mobsound' 'Yes' or @inlist 'mobsound' 'yes'
+          playsound 'cheer.wav'
+        endif
       endif
       if @injournal 'mess' 'system'
         clearjournal
@@ -163,11 +177,11 @@ for 0 to 'xaxis'
         equipitem 'bow' 2
       endif
       //attack sea serp
-      getenemy 'murderer' 'enemy' 'criminal' 'gray' 'closest'
+      getenemy 'enemy' 'criminal' 'gray' 'closest'
       while @inrange 'enemy' 10
         if @inlist 'mobsound' 'Yes' or @inlist 'mobsound' 'yes'
-          if timer 'Sound Timer' > 7000
-            playsound 'error.wav'
+          if timer 'Sound Timer' > 10000
+            playsound 'bell.wav'
             settimer 'Sound Timer' 0
           endif
         endif
@@ -185,17 +199,35 @@ for 0 to 'xaxis'
           continue
         endif
         // If we are poisoned or don't have full health
-        if poisoned 'self' or hits < 80
+        if poisoned 'self' or hits < 85
           bandageself
           settimer 'Bandage Timer' 0
         endif
-      endif
+      endwhile
     endwhile
-  endwhile
-  clearjournal
-endfor
-clearjournal
-endfor
-msg 'forward'
-pause 4000
-msg 'stop'
+    clearjournal
+  endfor
+  if @inlist 'drive' 'Yes' or @inlist 'drive' 'yes'
+    msg '[e whistle'
+    pause 350
+    for 0 to '3'
+      msg 'Back One'
+      Pause 350
+    endfor
+    for 0 to '6'
+      msg 'Forward One'
+      Pause 350
+    endfor
+    for 0 to '3'
+      msg 'Left One'
+      Pause 350
+    endfor
+    for 0 to '6'
+      msg 'Right One'
+      Pause 350
+    endfor
+    msg 'Forward'
+    pause 4500
+    msg 'stop'
+    playsound 'pssst.wav'
+  endif
