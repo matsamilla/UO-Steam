@@ -6,43 +6,37 @@
 @createlist 'scan'
 @clearlist 'skin'
 @createlist 'skin'
-@clearlist 'track'
-@createlist 'track'
+@clearlist 'drive'
+@createlist 'drive'
 //********* SETUP ****************************************
-pushlist 'mobsound' 'yes' // yes for mob sound, no for no sound.
+pushlist 'mobsound' 'no' // yes for mob sound, no for no sound.
 pushlist 'attack' 'yes' // yes to attack, no for no attack
 pushlist 'scan' 'yes' // yes to scan the horizons
-pushlist 'skin' 'yes' // Skin serps? yes to do so
-pushlist 'track' 'yes' //yes to train skills
+pushlist 'skin' 'yes' // Will skin & re-open nearby corpses
+pushlist 'drive' 'yes' // yes to drive boat
 //********************************************************
 if not timerexists 'Sound Timer'
   createtimer 'Sound Timer'
-  settimer 'Sound Timer' 10000
-endif
-if not timerexists 'SkillTimer'
-  createtimer 'SkillTimer'
-  settimer 'SkillTimer' 10500
+  settimer 'Sound Timer' 15000
 endif
 if not timerexists 'Bandage Timer'
   createtimer 'Bandage Timer'
   settimer 'Bandage Timer' 10250
 endif
-// Check the bandage timer to see if enough time has elapsed
-if timer 'Bandage Timer' < 10250
-  // Small delay to slow down the loop. 100 milliseconds means we will not miss
-  // a bandage.
-  pause 100
-  // We need to wait for our current bandage to finish so start the while
-  // loop from the beginning
-  continue
-endif
 // If we are poisoned or don't have full health
-if poisoned 'self' or hits < 80
-  // Enough time has elapsed lets apply a bandage.
-  bandageself
-  // Reset the timer.
-  settimer 'Bandage Timer' 0
-endif
+while poisoned 'self'
+  autotargetself
+  cast 'Cure'
+  pause 2000
+endwhile
+while diffhits > 30 and not dead
+  autotargetself
+  bigheal
+  pause 1500
+  if not @findobject 'lefthand'
+    equipitem 'bow' 2
+  endif
+endwhile
 if not @listexists 'xaxis'
   @createlist 'xaxis'
   @pushlist 'xaxis' 3
@@ -66,7 +60,6 @@ endif
 if not @findobject 'bow'
   promptalias 'bow'
 endif
-// Update Pole
 if not @findobject 'pole'
   if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
     setalias 'pole' 'found'
@@ -80,34 +73,41 @@ endif
 for 0 to 'xaxis'
   for 0 to 'yaxis'
     while not @injournal 'biting' 'system'
+      // If we are poisoned or don't have full health
+      while poisoned 'self'
+        autotargetself
+        cast 'Cure'
+        pause 2000
+      endwhile
+      while diffhits > 30 and not dead
+        autotargetself
+        bigheal
+        pause 1500
+        if not @findobject 'lefthand'
+          equipitem 'bow' 2
+        endif
+      endwhile
       // Skin serps
       if @inlist 'skin' 'Yes' or @inlist 'skin' 'yes'
         if @findtype 0x2006 'any' 'ground' 'any' 2
           usetype 0xf52
           waitfortarget 3500
           target! 'found'
+          pause 600
+          useobject 'found'
           ignoreobject 'found'
           unsetalias 'found'
+          pause 600
         endif
       endif
-      // Tracking 
-      if @inlist 'track' 'Yes' or @inlist 'track' 'yes'
-        if timer 'SkillTimer' > 10500
-          useskill tracking
-          waitforgump 0xb16e7d71 2000
-          replygump 0xb16e7d71 4
-          pause 800
-          settimer 'SkillTimer' 0
-        endif
-      endif
-      // Scan The Horizons
+      // Scan the Horizons
       if @inlist 'scan' 'Yes' or @inlist 'scan' 'yes'
         msg 'scan the horizons'
       endif
       if not @findobject 'lefthand'
         equipitem 'bow' 2
       endif
-      // Update Pole
+      // Reset pole
       if not @findobject 'pole'
         if @findtype '0xdbf' 'any' 'backpack' 'any' '3'
           setalias 'pole' 'found'
@@ -126,10 +126,13 @@ for 0 to 'xaxis'
       if not @injournal 'biting' 'system'
         pause 7750
       endif
+      //Cheer
       if @injournal 'pull a bottle' 'system'
         clearjournal
         headmsg 'GOT ONE'
-        playsound 'cheer.wav'
+        if @inlist 'mobsound' 'Yes' or @inlist 'mobsound' 'yes'
+          playsound 'cheer.wav'
+        endif
       endif
       if @injournal 'mess' 'system'
         clearjournal
@@ -163,36 +166,61 @@ for 0 to 'xaxis'
         endif
       endif
       //end fishing cleanup
-      //if not @findobject 'lefthand'
-      //equipitem 'bow' 2
-      //endif
+      if not @findobject 'lefthand'
+        equipitem 'bow' 2
+      endif
       //attack sea serp
-      getenemy 'murderer' 'enemy' 'criminal' 'gray' 'closest'
+      getenemy 'enemy' 'criminal' 'gray' 'closest'
       while @inrange 'enemy' 10
-        if @inlist 'attack' 'Yes' or @inlist 'attack' 'yes'
-          attack! 'enemy'
-        endif
         if @inlist 'mobsound' 'Yes' or @inlist 'mobsound' 'yes'
           if timer 'Sound Timer' > 10000
             playsound 'bell.wav'
             settimer 'Sound Timer' 0
           endif
         endif
+        // Attack!
+        if @inlist 'attack' 'Yes' or @inlist 'attack' 'yes'
+          attack! 'enemy'
+        endif
+        while poisoned 'self'
+          autotargetself
+          cast 'Cure'
+          pause 2000
+        endwhile
         while diffhits > 30 and not dead
           autotargetself
           bigheal
           pause 1500
+          if not @findobject 'lefthand'
+            equipitem 'bow' 2
+          endif
         endwhile
-        if not @findobject 'lefthand'
-          equipitem 'bow' 2
-        endif
-        pause 800
       endwhile
     endwhile
     clearjournal
   endfor
-  clearjournal
 endfor
-msg 'forward'
-pause 4000
-msg 'stop'
+if @inlist 'drive' 'Yes' or @inlist 'drive' 'yes'
+  msg '[e whistle'
+  pause 350
+  for 0 to '3'
+    msg 'Back One'
+    Pause 350
+  endfor
+  for 0 to '6'
+    msg 'Forward One'
+    Pause 350
+  endfor
+  for 0 to '3'
+    msg 'Left One'
+    Pause 350
+  endfor
+  for 0 to '6'
+    msg 'Right One'
+    Pause 350
+  endfor
+  msg 'Forward'
+  pause 4500
+  msg 'stop'
+  playsound 'pssst.wav'
+endif
