@@ -1,0 +1,57 @@
+if not @findalias 'slayerbag'
+  useobject 'self'
+  headmsg 'Select the bag or animal to store slayers in.'
+  promptalias 'slayerbag'
+endif
+if not @findobject 'Trash Bag'
+  headmsg 'Select the Trash'
+  promptalias 'Trash Bag'
+endif
+// HIDE
+if not hidden 'self' and skill 'hiding' >= '30'
+  useskill 'hiding'
+  pause 5000
+endif
+if not mounted 'self'
+  useobject 'slayerbag'
+  pause 600
+endif
+if @counttype 0xef3 0 'backpack' < 16
+  headmsg 'Out of Scrolls'
+  stop
+endif
+if @findtype '0xfbf' 'any' 'backpack' 'any' '2'
+  @usetype '0xfbf' 'any' 'backpack' '2'
+else
+  headmsg 'Need more tools!'
+  stop
+endif
+waitforgump 0x38920abd 1500
+replygump 0x38920abd 57
+waitforgump 0x38920abd 1500
+replygump 0x38920abd 16
+waitforgump 0x38920abd 1500
+pause 2000
+if @injournal 'crafted a slayer' 'system'
+  if mounted 'self'
+    useobject 'self'
+    pause 600
+  endif
+  @findtype 0xefa 'backpack'
+  moveitem 'found' 'slayerbag'
+  pause 600
+  if not mounted 'self'
+    useobject 'slayerbag'
+    pause 600
+  endif
+  @unsetalias 'found'
+  clearjournal
+  headmsg 'Slayer crafted!' 33
+  pause 600
+else
+  while @findtype '0xefa' 'any' 'backpack' '1' '2'
+    moveitem 'found' 'Trash Bag'
+    pause 600
+    @unsetalias 'found'
+  endwhile
+endif
